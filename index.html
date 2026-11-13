@@ -152,9 +152,9 @@ const num=id=>Number($(id).value)||0;
 const fmt=n=>(Number(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 function chooseRole(r){role=r;$('operatorRole').classList.toggle('active',r==='operador');$('managerRole').classList.toggle('active',r==='gestor')}
 
-// LOGIN DIRETO E BLINDADO PARA ACESSO IMEDIATO
-$('loginForm').addEventListener('submit', e => {
-  e.preventDefault();
+// ENTRADA DIRETA AO CLICAR NO BOTÃO
+function entrarSistema(e) {
+  if(e) e.preventDefault();
   $('loginError').classList.add('hidden');
   $('loginScreen').classList.add('hidden');
   $('app').classList.remove('hidden');
@@ -166,6 +166,11 @@ $('loginForm').addEventListener('submit', e => {
   $('entryDate').value = today();
   $('entryTime').value = new Date().toTimeString().slice(0, 5);
   render();
+}
+
+// Associa a função diretamente ao formulário e ao botão
+document.addEventListener('DOMContentLoaded', () => {
+  $('loginForm').onsubmit = entrarSistema;
 });
 
 function logout(){$('app').classList.add('hidden');$('loginScreen').classList.remove('hidden');$('password').value=''}
@@ -187,5 +192,4 @@ function importJSON(){const f=$('restoreFile').files[0];if(!f){alert('Selecione 
 function printReport(){const list=filtered();if(!list.length){alert('Não há registros para gerar o relatório.');return}const rows=list.map(r=>`<tr><td>${r.date} ${r.time}</td><td>${r.source}</td><td>${r.volume}</td><td>${r.soda}</td><td>${r.poly}</td><td>${r.chlor}</td><td>${r.anti}</td><td>${r.phIn??'-'}/${r.phOut??'-'}</td><td>${r.turbidity??'-'}</td><td>${(r.notes||'').replace(/[<>&]/g,'')}</td></tr>`).join('');$('print-area').innerHTML=`<div style="font-family:Arial;padding:20px"><h1>ZUPPANI INDUSTRIAL LTDA.</h1><h2>Relatório operacional — ETE</h2><p>Período: ${$('period').selectedOptions[0].text} | Referência: ${$('filterDate').value} | Operador: ${$('operatorName').value}</p><table border="1" cellspacing="0" cellpadding="5" style="width:100%;border-collapse:collapse;font-size:10px"><thead><tr><th>Data/hora</th><th>Origem</th><th>Volume L</th><th>Soda L</th><th>Polímero mL</th><th>Cloreto L</th><th>Anti L</th><th>pH E/S</th><th>NTU</th><th>Observação</th></tr></thead><tbody>${rows}</tbody></table><p style="margin-top:40px">Operador responsável: ${$('operatorName').value}</p><p>Desenvolvido por Ray de Sousa Silva</p></div>`;window.print()}
 $('filterDate').value=today();$('entryDate').value=today();
 </script>
-</body>
-</html>
+
