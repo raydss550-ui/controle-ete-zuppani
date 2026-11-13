@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#061b43">
+<title>Controle ETE Zuppani Advanced</title>
+<link rel="icon" href="assets/zupp-banner.jpg">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--navy:#061b43;--blue:#063b91;--red:#e21d36;--cyan:#22d3ee}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 50% 0,#123c83 0,#071b43 48%,#020817 100%);color:#eaf2ff;font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+.glass{background:rgba(7,25,62,.88);border:1px solid rgba(96,165,250,.24);box-shadow:0 12px 34px #0005;backdrop-filter:blur(14px)}
+.field{width:100%;background:#04132f;border:1px solid #1e4380;color:#fff;border-radius:10px;padding:10px 12px;outline:none;font-size:13px}
+.field:focus{border-color:#e21d36;box-shadow:0 0 0 2px #e21d3628}
+.btn{border-radius:10px;padding:10px 14px;font-size:12px;font-weight:800;transition:.18s}
+.btn:active{transform:scale(.98)} .primary{background:linear-gradient(100deg,#d71935,#f04455);color:white}.secondary{background:#0c2b63;border:1px solid #28549a;color:#dbeafe}.muted{color:#9db8e7}
+.login-bg{background:linear-gradient(180deg,rgba(2,10,29,.18),rgba(2,10,29,.88)),url('assets/zupp-banner.jpg') center/cover no-repeat}
+.role.active{background:#e21d36;color:white;border-color:#fb7185}
+.kpi{background:linear-gradient(145deg,rgba(13,43,97,.95),rgba(5,19,48,.95));border:1px solid #23477f;border-top:3px solid var(--accent);border-radius:15px;padding:14px}
+table{border-collapse:collapse;min-width:900px;width:100%;font-size:12px} th{background:#06132e;color:#9fc5ff;text-transform:uppercase;font-size:10px;letter-spacing:.05em}td,th{padding:11px 10px;border-bottom:1px solid #1d3764;text-align:left}tr:hover td{background:#ffffff08}
+.hidden{display:none!important}
+@media print{body{background:white;color:#111}.no-print{display:none!important}#print-area{display:block!important;color:#111}.glass{background:white;color:#111;box-shadow:none;border:1px solid #ddd}table{min-width:0;font-size:9px}th{background:#eee;color:#111}td,th{padding:5px}}
+</style>
+</head>
+<body>
+<!-- LOGIN -->
+<section id="loginScreen" class="login-bg min-h-screen flex items-center justify-center p-4">
+  <div class="glass w-full max-w-md rounded-3xl p-6 sm:p-8">
+    <div class="text-center mb-6">
+      <div class="mx-auto rounded-2xl overflow-hidden border border-blue-300/40 shadow-xl mb-5" style="height:112px">
+        <img src="assets/zupp-banner.jpg" alt="Zupp" class="w-full h-full object-cover">
+      </div>
+      <p class="text-cyan-200 text-xs font-bold tracking-[.22em] uppercase">Zuppani Industrial Ltda.</p>
+      <h1 class="text-2xl font-black mt-2">Sistema ETE Zuppani</h1>
+      <p class="text-blue-200/80 text-xs mt-1">Controle operacional e gestão química</p>
+    </div>
+    <div class="grid grid-cols-2 gap-2 mb-5">
+      <button id="operatorRole" class="role active btn border border-blue-700" type="button" onclick="chooseRole('operador')">⚙ OPERADOR</button>
+      <button id="managerRole" class="role btn border border-blue-700 text-blue-200" type="button" onclick="chooseRole('gestor')">▥ GESTOR ETE</button>
+    </div>
+    <form id="loginForm" class="space-y-3">
+      <label class="block text-xs font-bold text-blue-100">Usuário
+        <input id="username" class="field mt-1" autocomplete="username" value="admin" required>
+      </label>
+      <label class="block text-xs font-bold text-blue-100">Senha
+        <input id="password" class="field mt-1" type="password" autocomplete="current-password" value="admin" required>
+      </label>
+      <p id="loginError" class="hidden text-center text-xs text-rose-300 bg-rose-950/60 border border-rose-700 rounded-lg p-2">Usuário ou senha incorretos.</p>
+      <button class="btn primary w-full py-3 uppercase tracking-wider" type="submit">Entrar no sistema</button>
+    </form>
+    <div class="mt-5 pt-4 border-t border-blue-800/70 text-center text-[11px] text-blue-200/70">
+      Acesso de demonstração: <b class="text-white">admin</b> / <b class="text-white">admin</b><br>
+      <span class="text-[10px]">Credenciais locais de demonstração — altere antes de uso real.</span>
+    </div>
+  </div>
+</section>
+
+<!-- APP -->
+<div id="app" class="hidden min-h-screen">
+<header class="no-print sticky top-0 z-20 bg-[#020b20]/95 backdrop-blur border-b border-blue-900 px-3 sm:px-6 py-3">
+ <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+  <div class="flex items-center gap-3 min-w-0">
+   <div class="w-16 h-10 rounded-lg overflow-hidden border border-blue-400/40 shrink-0"><img src="assets/zupp-banner.jpg" class="w-full h-full object-cover"></div>
+   <div class="min-w-0"><div class="font-black text-sm sm:text-base">ETE Zuppani <span id="roleBadge" class="text-[9px] bg-rose-600/20 text-rose-300 border border-rose-500/40 px-2 py-1 rounded-full ml-1">OPERADOR</span></div><div class="text-[10px] text-blue-200">Zuppani Industrial Ltda.</div></div>
+  </div>
+  <div class="flex gap-2">
+   <button class="btn secondary" onclick="openBackup()">Backup</button>
+   <button class="btn primary" onclick="printReport()">PDF / Imprimir</button>
+   <button class="btn secondary" onclick="logout()">Sair</button>
+  </div>
+ </div>
+</header>
+<main class="max-w-7xl mx-auto p-3 sm:p-6 space-y-4">
+ <section class="no-print glass rounded-2xl p-3 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+  <div class="flex flex-wrap gap-2 items-center">
+   <label class="text-xs text-blue-200">Data de referência <input id="filterDate" type="date" class="field !w-auto inline-block ml-1" onchange="render()"></label>
+   <select id="period" class="field !w-auto" onchange="render()"><option value="daily">Hoje</option><option value="weekly">Últimos 7 dias</option><option value="monthly">Mês</option><option value="all">Todos</option></select>
+  </div>
+  <label class="text-xs text-blue-200 flex items-center gap-2">Operador
+   <input id="operatorName" class="field !w-44" value="Operador ETE" onchange="localStorage.setItem('zupp_operator',this.value)">
+  </label>
+ </section>
+
+ <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+  <div class="kpi" style="--accent:#60a5fa"><div class="text-[10px] uppercase font-bold text-blue-200">Soda cáustica</div><div id="kSoda" class="text-2xl font-black mt-2">0,00 L</div></div>
+  <div class="kpi" style="--accent:#34d399"><div class="text-[10px] uppercase font-bold text-blue-200">Polímero</div><div id="kPoly" class="text-2xl font-black mt-2">0,00 mL</div></div>
+  <div class="kpi" style="--accent:#fbbf24"><div class="text-[10px] uppercase font-bold text-blue-200">Cloreto de alumínio</div><div id="kChlor" class="text-2xl font-black mt-2">0,00 L</div></div>
+  <div class="kpi" style="--accent:#fb7185"><div class="text-[10px] uppercase font-bold text-blue-200">Volume tratado</div><div id="kVolume" class="text-2xl font-black mt-2">0 L</div></div>
+ </section>
+
+ <section class="grid lg:grid-cols-2 gap-4">
+  <div id="entryPanel" class="glass rounded-2xl p-4">
+   <div class="flex justify-between items-center mb-3"><h2 class="font-black text-sm">Novo lançamento operacional</h2><span id="formMode" class="text-[10px] text-cyan-300">NOVO</span></div>
+   <form id="entryForm" class="space-y-3">
+    <input type="hidden" id="editId">
+    <div class="grid grid-cols-2 gap-2">
+     <label class="text-[11px] text-blue-200">Data<input id="entryDate" type="date" class="field mt-1" required></label>
+     <label class="text-[11px] text-blue-200">Hora<input id="entryTime" type="time" class="field mt-1" required></label>
+     <label class="text-[11px] text-blue-200 col-span-2">Origem
+      <select id="source" class="field mt-1"><option value="Fábrica">Efluente da fábrica</option><option value="Transporte">Água de transporte</option><option value="Exímia">Água Exímia</option><option value="IBC">Mistura / IBCs</option></select>
+     </label>
+     <label class="text-[11px] text-blue-200">Volume tratado (L)<input id="volume" type="number" min="0" step="0.01" class="field mt-1" placeholder="2300"></label>
+     <label class="text-[11px] text-blue-200">Duração (min)<input id="duration" type="number" min="0" class="field mt-1" placeholder="45"></label>
+     <label class="text-[11px] text-blue-200">Soda cáustica (L)<input id="soda" type="number" min="0" step=".01" class="field mt-1" value="0"></label>
+     <label class="text-[11px] text-blue-200">Polímero (mL)<input id="poly" type="number" min="0" step=".01" class="field mt-1" value="0"></label>
+     <label class="text-[11px] text-blue-200">Cloreto alumínio (L)<input id="chlor" type="number" min="0" step=".01" class="field mt-1" value="0"></label>
+     <label class="text-[11px] text-blue-200">Antiespumante (L)<input id="anti" type="number" min="0" step=".01" class="field mt-1" value="0"></label>
+     <label class="text-[11px] text-blue-200">pH entrada<input id="phIn" type="number" min="0" max="14" step=".1" class="field mt-1"></label>
+     <label class="text-[11px] text-blue-200">pH saída<input id="phOut" type="number" min="0" max="14" step=".1" class="field mt-1"></label>
+     <label class="text-[11px] text-blue-200">Turbidez (NTU)<input id="turbidity" type="number" min="0" step=".1" class="field mt-1"></label>
+     <label class="text-[11px] text-blue-200">Floculação<select id="floc" class="field mt-1"><option value="">Selecione</option><option>Excelente</option><option>Bom</option><option>Fino / pequeno</option><option>Sem floculação</option></select></label>
+     <label class="text-[11px] text-blue-200 col-span-2">Observações<input id="notes" class="field mt-1" placeholder="Observações do operador..."></label>
+     <label class="text-[11px] text-blue-200 col-span-2">Foto de evidência<input id="photo" type="file" accept="image/*" capture="environment" class="field mt-1"></label>
+    </div>
+    <div class="flex gap-2"><button class="btn primary flex-1" type="submit">Salvar tratamento</button><button class="btn secondary" type="button" onclick="resetForm()">Limpar</button></div>
+   </form>
+  </div>
+  <div class="glass rounded-2xl p-4">
+   <div class="flex justify-between items-center mb-3"><h2 class="font-black text-sm">Indicadores e tendências</h2><select id="chartMode" class="field !w-auto" onchange="renderChart()"><option value="chem">Consumo de reagentes</option><option value="volume">Volume por origem</option></select></div>
+   <div class="h-72"><canvas id="chart"></canvas></div>
+   <div class="grid grid-cols-2 gap-2 mt-3 text-xs"><div class="bg-blue-950/60 p-3 rounded-xl"><span class="text-blue-300">Lançamentos</span><b id="count" class="block text-lg">0</b></div><div class="bg-blue-950/60 p-3 rounded-xl"><span class="text-blue-300">Tempo total</span><b id="durationTotal" class="block text-lg">0 min</b></div></div>
+  </div>
+ </section>
+
+ <section class="glass rounded-2xl overflow-hidden">
+  <div class="p-4 flex flex-wrap items-center justify-between gap-2 border-b border-blue-900"><div><h2 class="font-black text-sm">Histórico operacional</h2><p class="text-[11px] text-blue-300 mt-1">Registros do período selecionado</p></div><div class="no-print flex gap-2"><button class="btn secondary" onclick="exportCSV()">Exportar CSV</button><button class="btn secondary" onclick="exportJSON()">Backup JSON</button></div></div>
+  <div class="overflow-x-auto"><table><thead><tr><th>Data / Hora</th><th>Origem</th><th>Volume</th><th>Soda</th><th>Polímero</th><th>Cloreto</th><th>Antiesp.</th><th>pH E/S</th><th>Turbidez</th><th>Floculação</th><th>Observação</th><th class="no-print">Ações</th></tr></thead><tbody id="rows"></tbody></table></div>
+  <div id="empty" class="p-8 text-center text-blue-300 text-xs hidden">Nenhum registro encontrado neste período.</div>
+ </section>
+ <footer class="text-center text-[10px] text-blue-300/70 py-3">Zuppani Industrial Ltda. • Sistema de Controle ETE • Desenvolvido por Ray de Sousa Silva</footer>
+</main>
+</div>
+
+<!-- BACKUP MODAL -->
+<div id="backupModal" class="hidden fixed inset-0 z-50 bg-black/80 p-4 flex items-center justify-center">
+ <div class="glass rounded-2xl p-5 w-full max-w-md"><div class="flex justify-between mb-4"><h3 class="font-black">Backup e restauração</h3><button onclick="closeBackup()">✕</button></div>
+ <p class="text-xs text-blue-200 mb-4">Exporte os registros para guardar uma cópia ou restaure um arquivo JSON gerado pelo sistema.</p>
+ <button class="btn primary w-full mb-3" onclick="exportJSON()">Baixar backup JSON</button>
+ <input id="restoreFile" type="file" accept=".json,application/json" class="field mb-3">
+ <button class="btn secondary w-full" onclick="importJSON()">Restaurar arquivo</button>
+ <p class="text-[10px] text-rose-200 mt-3">A restauração substitui os registros atualmente salvos neste navegador.</p></div>
+</div>
+<div id="print-area" class="hidden"></div>
+
+<script>
+const KEY='ete_zuppani_advanced_v5';
+let role='operador', records=[], chart=null, photoData='';
+const $=id=>document.getElementById(id);
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const num=id=>Number($(id).value)||0;
+const fmt=n=>(Number(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+function chooseRole(r){role=r;$('operatorRole').classList.toggle('active',r==='operador');$('managerRole').classList.toggle('active',r==='gestor')}
+$('loginForm').addEventListener('submit',e=>{e.preventDefault();if($('username').value.trim()==='admin'&&$('password').value==='admin'){$('loginError').classList.add('hidden');$('loginScreen').classList.add('hidden');$('app').classList.remove('hidden');$('roleBadge').textContent=role==='gestor'?'GESTOR ETE':'OPERADOR';$('entryPanel').classList.toggle('hidden',role==='gestor');$('operatorName').value=localStorage.getItem('zupp_operator')||'Operador ETE';load();$('filterDate').value=today();$('entryDate').value=today();$('entryTime').value=new Date().toTimeString().slice(0,5);render()}else $('loginError').classList.remove('hidden')});
+function logout(){$('app').classList.add('hidden');$('loginScreen').classList.remove('hidden');$('password').value=''}
+function load(){try{records=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(records))records=[]}catch{records=[]}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(records))}
+function resetForm(){$('entryForm').reset();$('editId').value='';$('entryDate').value=$('filterDate').value||today();$('entryTime').value=new Date().toTimeString().slice(0,5);$('formMode').textContent='NOVO';photoData=''}
+$('photo').addEventListener('change',e=>{const f=e.target.files[0];if(!f){photoData='';return}if(f.size>5*1024*1024){alert('A foto deve ter até 5 MB.');e.target.value='';return}const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');let w=im.width,h=im.height;const s=Math.min(1,1000/Math.max(w,h));c.width=Math.round(w*s);c.height=Math.round(h*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);photoData=c.toDataURL('image/jpeg',.72)};im.src=rd.result};rd.readAsDataURL(f)});
+$('entryForm').addEventListener('submit',e=>{e.preventDefault();const item={id:$('editId').value||String(Date.now()),date:$('entryDate').value,time:$('entryTime').value,source:$('source').value,volume:num('volume'),duration:num('duration'),soda:num('soda'),poly:num('poly'),chlor:num('chlor'),anti:num('anti'),phIn:$('phIn').value===''?null:num('phIn'),phOut:$('phOut').value===''?null:num('phOut'),turbidity:$('turbidity').value===''?null:num('turbidity'),floc:$('floc').value,notes:$('notes').value.trim(),photo:photoData};if(!item.volume&&!item.soda&&!item.poly&&!item.chlor&&!item.anti){alert('Informe o volume tratado ou ao menos um reagente.');return}const i=records.findIndex(x=>x.id===item.id);if(i>=0)records[i]=item;else records.push(item);persist();$('filterDate').value=item.date;resetForm();render()});
+function editRecord(id){const r=records.find(x=>x.id===id);if(!r)return;const map={editId:'id',entryDate:'date',entryTime:'time',source:'source',volume:'volume',duration:'duration',soda:'soda',poly:'poly',chlor:'chlor',anti:'anti',phIn:'phIn',phOut:'phOut',turbidity:'turbidity',floc:'floc',notes:'notes'};Object.entries(map).forEach(([el,k])=>$(el).value=r[k]??'');photoData=r.photo||'';$('formMode').textContent='EDITANDO';window.scrollTo({top:0,behavior:'smooth'})}
+function deleteRecord(id){if(confirm('Excluir este lançamento?')){records=records.filter(r=>r.id!==id);persist();render()}}
+function filtered(){const ref=$('filterDate').value||today(),p=$('period').value;const d=new Date(ref+'T00:00:00');return records.filter(r=>{const x=new Date(r.date+'T00:00:00');if(p==='daily')return r.date===ref;if(p==='weekly')return (d-x)/86400000>=0&&(d-x)/86400000<7;if(p==='monthly')return x.getMonth()===d.getMonth()&&x.getFullYear()===d.getFullYear();return true}).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))}
+function render(){const list=filtered(),sum=k=>list.reduce((a,r)=>a+(Number(r[k])||0),0);$('kSoda').textContent=fmt(sum('soda'))+' L';$('kPoly').textContent=fmt(sum('poly'))+' mL';$('kChlor').textContent=fmt(sum('chlor'))+' L';$('kVolume').textContent=fmt(sum('volume'))+' L';$('count').textContent=list.length;$('durationTotal').textContent=sum('duration')+' min';$('rows').innerHTML='';$('empty').classList.toggle('hidden',list.length>0);list.slice().reverse().forEach(r=>{const tr=document.createElement('tr');const vals=[`${r.date.split('-').reverse().join('/')} ${r.time}`,r.source,fmt(r.volume)+' L',fmt(r.soda),fmt(r.poly),fmt(r.chlor),fmt(r.anti),`${r.phIn??'-'} / ${r.phOut??'-'}`,r.turbidity==null?'-':r.turbidity+' NTU',r.floc||'-',r.notes||''];vals.forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});const actions=document.createElement('td');actions.className='no-print whitespace-nowrap';actions.innerHTML=`<button class="text-amber-300 mr-2" onclick="editRecord('${r.id}')">Editar</button><button class="text-rose-300" onclick="deleteRecord('${r.id}')">Excluir</button>`;tr.appendChild(actions);$('rows').appendChild(tr)});renderChart(list)}
+function renderChart(list=filtered()){const ctx=$('chart');if(chart)chart.destroy();const mode=$('chartMode').value;let data,labels;if(mode==='chem'){labels=['Soda (L)','Polímero (mL)','Cloreto (L)','Antiespumante (L)'];data=[list.reduce((a,r)=>a+r.soda,0),list.reduce((a,r)=>a+r.poly,0),list.reduce((a,r)=>a+r.chlor,0),list.reduce((a,r)=>a+r.anti,0)]}else{labels=['Fábrica','Transporte','Exímia','IBC'];data=labels.map(s=>list.filter(r=>r.source===s).reduce((a,r)=>a+r.volume,0))}chart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:mode==='chem'?'Consumo acumulado':'Volume (L)',data,backgroundColor:['#3b82f6','#10b981','#f59e0b','#e11d48'],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#bfdbfe'},grid:{display:false}},y:{beginAtZero:true,ticks:{color:'#bfdbfe'},grid:{color:'#24416e'}}}}})}
+function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
+function exportJSON(){download(new Blob([JSON.stringify(records,null,2)],{type:'application/json'}),`Backup_ETE_Zuppani_${today()}.json`)}
+function exportCSV(){const list=filtered();if(!list.length){alert('Não há registros para exportar.');return}const headers=['Data','Hora','Origem','Volume_L','Duracao_min','Soda_L','Polimero_mL','Cloreto_L','Antiespumante_L','pH_Entrada','pH_Saida','Turbidez_NTU','Floculacao','Observacoes'];const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const lines=[headers.join(';'),...list.map(r=>[r.date,r.time,r.source,r.volume,r.duration,r.soda,r.poly,r.chlor,r.anti,r.phIn,r.phOut,r.turbidity,r.floc,r.notes].map(q).join(';'))];download(new Blob(['\ufeff'+lines.join('\n')],{type:'text/csv;charset=utf-8'}),`Relatorio_ETE_${today()}.csv`)}
+function openBackup(){$('backupModal').classList.remove('hidden')}function closeBackup(){$('backupModal').classList.add('hidden')}
+function importJSON(){const f=$('restoreFile').files[0];if(!f){alert('Selecione um arquivo JSON.');return}const rd=new FileReader();rd.onload=()=>{try{const v=JSON.parse(rd.result);if(!Array.isArray(v)||v.some(x=>!x||typeof x!=='object'||!x.id||!x.date)){throw Error()}if(confirm(`Restaurar ${v.length} registros? Os dados atuais serão substituídos.`)){records=v;persist();render();closeBackup();alert('Backup restaurado.')}}catch{alert('Arquivo inválido ou incompatível.')}};rd.readAsText(f)}
+function printReport(){const list=filtered();if(!list.length){alert('Não há registros para gerar o relatório.');return}const rows=list.map(r=>`<tr><td>${r.date} ${r.time}</td><td>${r.source}</td><td>${r.volume}</td><td>${r.soda}</td><td>${r.poly}</td><td>${r.chlor}</td><td>${r.anti}</td><td>${r.phIn??'-'}/${r.phOut??'-'}</td><td>${r.turbidity??'-'}</td><td>${(r.notes||'').replace(/[<>&]/g,'')}</td></tr>`).join('');$('print-area').innerHTML=`<div style="font-family:Arial;padding:20px"><h1>ZUPPANI INDUSTRIAL LTDA.</h1><h2>Relatório operacional — ETE</h2><p>Período: ${$('period').selectedOptions[0].text} | Referência: ${$('filterDate').value} | Operador: ${$('operatorName').value}</p><table border="1" cellspacing="0" cellpadding="5" style="width:100%;border-collapse:collapse;font-size:10px"><thead><tr><th>Data/hora</th><th>Origem</th><th>Volume L</th><th>Soda L</th><th>Polímero mL</th><th>Cloreto L</th><th>Anti L</th><th>pH E/S</th><th>NTU</th><th>Observação</th></tr></thead><tbody>${rows}</tbody></table><p style="margin-top:40px">Operador responsável: ${$('operatorName').value}</p><p>Desenvolvido por Ray de Sousa Silva</p></div>`;window.print()}
+$('filterDate').value=today();$('entryDate').value=today();
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+CONTROLE ETE ZUPPANI ADVANCED
+
+Como executar:
+1. Extraia a pasta do ZIP.
+2. Mantenha index.html e a pasta assets juntos.
+3. Abra index.html em um navegador moderno (Chrome recomendado).
+4. Para usar no celular, copie a pasta para uma hospedagem HTTPS ou abra por um servidor local.
+
+Acesso demonstrativo:
+- Perfil Operador: admin / admin
+- Perfil Gestor ETE: admin / admin
+
+Observações:
+- Os registros ficam no armazenamento local do navegador/dispositivo.
+- Faça backups JSON regularmente.
+- Limpar os dados do navegador pode apagar os registros.
+- O login é demonstrativo e não oferece segurança de autenticação empresarial.
+- Tailwind e Chart.js são carregados por CDN; alguns recursos visuais/gráficos precisam de internet.
