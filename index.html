@@ -20,11 +20,13 @@
     text-align: center;
   }
 
-  .print-chart-container img {
-    width: 100%;
-    max-width: 850px;
-    height: 280px;
-    object-fit: contain;
+  .print-chart-container svg {
+    display:block;
+    width:100%;
+    max-width:850px;
+    height:auto;
+    max-height:310px;
+    margin:0 auto;
   }
 
   .print-section {
@@ -2757,16 +2759,8 @@ function printReport(){
     return;
   }
 
-  // Captura os gráficos antes da impressão
-  let chartImage = '';
-
-  if(chart){
-    try{
-      chartImage = chart.toBase64Image('image/png', 1);
-    }catch(e){
-      console.error('Erro ao capturar gráfico:', e);
-    }
-  }
+  // O gráfico do relatório é desenhado em SVG independente do canvas.
+  // Isso evita que o serviço de impressão do Android ignore o canvas/imagem.
 
   const treatmentRows = list
     .filter(r => r.type !== 'general')
@@ -2808,9 +2802,45 @@ function printReport(){
     `;
   }).join('');
 
-  const chartTitle = $('chartMode').value === 'chem'
+  const isChemChart = $('chartMode').value === 'chem';
+  const chartTitle = isChemChart
     ? 'CONSUMO DE REAGENTES'
     : 'VOLUME TRATADO POR ORIGEM';
+
+  const chartLabels = isChemChart
+    ? ['Soda líquida (L)', 'Polímero (mL)', 'Polímero PAC (L)', 'Antiespumante (L)']
+    : ['Fábrica', 'Transporte', 'Exímia', 'IBC'];
+
+  const chartValues = isChemChart
+    ? [total('soda'), total('poly'), total('chlor'), total('anti')]
+    : ['Fábrica', 'Transporte', 'Exímia', 'IBC'].map(source =>
+        treatments.filter(r => r.source === source)
+          .reduce((sum, r) => sum + (Number(r.volume) || 0), 0)
+      );
+
+  const maxChartValue = Math.max(...chartValues, 0);
+  const chartMax = maxChartValue > 0 ? maxChartValue * 1.15 : 1;
+  const chartColors = ['#2563eb', '#059669', '#d97706', '#9333ea'];
+  const chartBars = chartValues.map((value, i) => {
+    const y = 36 + i * 66;
+    const barWidth = Math.max(0, (Number(value) || 0) / chartMax * 470);
+    const shownValue = fmt(value);
+    return `
+      <text x="8" y="${y + 17}" font-size="13" fill="#111827">${escapeHTML(chartLabels[i])}</text>
+      <rect x="210" y="${y}" width="470" height="25" rx="5" fill="#e5e7eb" />
+      <rect x="210" y="${y}" width="${barWidth.toFixed(2)}" height="25" rx="5" fill="${chartColors[i]}" />
+      <text x="692" y="${y + 18}" font-size="12" font-weight="bold" fill="#111827">${escapeHTML(shownValue)}</text>
+    `;
+  }).join('');
+
+  const chartSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 310" role="img" aria-label="${chartTitle}">
+      <rect x="0" y="0" width="790" height="310" fill="#ffffff" />
+      ${chartBars}
+      <line x1="210" y1="20" x2="210" y2="292" stroke="#9ca3af" stroke-width="1" />
+      <text x="210" y="306" font-size="10" fill="#6b7280">Valores acumulados no período selecionado</text>
+    </svg>
+  `;
 
   $('print-area').innerHTML = `
 
@@ -2895,13 +2925,7 @@ function printReport(){
         </h3>
 
         <div class="print-chart-container">
-
-          ${
-            chartImage
-              ? `<img src="${chartImage}" alt="Gráfico operacional da ETE">`
-              : '<p>Gráfico indisponível para este relatório.</p>'
-          }
-
+          ${chartSvg}
         </div>
 
       </div>
