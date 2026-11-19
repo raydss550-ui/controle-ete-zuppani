@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+``<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -578,8 +578,6 @@ tr:hover td{background:#ffffff08}
     color: #111 !important;
   }
 
-  /* Remove a interface do sistema do fluxo de impressão.
-     visibility:hidden sozinho mantém o espaço ocupado e pode criar páginas vazias. */
   body > *:not(#print-area) {
     display: none !important;
   }
@@ -627,7 +625,6 @@ tr:hover td{background:#ffffff08}
     margin: 0 auto !important;
   }
 
-  /* Não manter seções inteiras juntas: tabelas longas devem continuar na página seguinte. */
   #print-area .print-section {
     break-inside: auto !important;
     page-break-inside: auto !important;
@@ -882,7 +879,7 @@ class="login-bg min-h-screen flex items-center justify-center p-4">
 
   <div class="kpi" style="--accent:#fbbf24">
     <div class="text-[10px] uppercase font-bold text-blue-200">
-      Polímero PAC (Cloreto)
+      Policloreto de Alumínio (PAC)
     </div>
 
     <div id="kChlor" class="text-2xl font-black mt-2">
@@ -1032,7 +1029,7 @@ class="login-bg min-h-screen flex items-center justify-center p-4">
         </label>
 
         <label class="text-[11px] text-blue-200">
-          Polímero PAC / Cloreto (L)
+          Policloreto de Alumínio (PAC) (L)
 
           <input id="chlor"
           type="number"
@@ -1315,7 +1312,7 @@ class="glass rounded-2xl p-4">
           <th>Tempo (h)</th>
           <th>Soda</th>
           <th>Polímero</th>
-          <th>Polímero PAC</th>
+          <th>Policloreto de Alumínio (PAC)</th>
           <th>Antiesp.</th>
           <th>pH E/S</th>
           <th>Turbidez</th>
@@ -1604,7 +1601,7 @@ const PRODUCT_DEFS = [
     key: 'chlor',
     recordField: 'chlor',
     containerType: 'ibc',
-    name: 'Polímero PAC',
+    name: 'Policloreto de Alumínio (PAC)',
     subtitle: 'IBC 800 L • Coagulante',
     unit: 'L',
     unitFull: 'Litros (L)',
@@ -1643,7 +1640,7 @@ const PRODUCT_DEFS = [
     unit: 'kg',
     unitFull: 'Quilos (kg)',
     defaultCapacity: 12.5,
-    defaultDensity: 0.75, // 1 mL no copinho = 0,75 g (0,00075 kg)
+    defaultDensity: 0.75,
     quickPresets: [
       { label: 'Caixa 12,5 kg', value: 12.5 },
       { label: '2 Caixas (25 kg)', value: 25 },
@@ -1720,18 +1717,15 @@ function calculateTankMetrics(prod){
   const density = Number(cfg.density) || prod.defaultDensity || 1;
   const refillTs = Number(cfg.refillTimestamp) || 0;
 
-  // Soma o consumo bruto registrado nos lançamentos após o último reabastecimento 100%
   const rawConsumedSinceRefill = records
     .filter(r => r.type !== 'general' && getRecordTimestamp(r) >= refillTs)
     .reduce((acc, r) => acc + (Number(r[prod.recordField]) || 0), 0);
 
-  // Consumo apenas do dia de referência selecionado
   const refDate = $('filterDate').value || today();
   const rawConsumedToday = records
     .filter(r => r.type !== 'general' && r.date === refDate)
     .reduce((acc, r) => acc + (Number(r[prod.recordField]) || 0), 0);
 
-  // Para o Polímero em pó: o lançamento é em mL no copinho, convertido para kg: (mL * densidade_g_ml) / 1000
   const isPowderBox = prod.containerType === 'box12kg';
   const consumedSinceRefill = isPowderBox
     ? (rawConsumedSinceRefill * density) / 1000
@@ -1761,7 +1755,6 @@ function buildContainerIllustration(prod, m, liquidBg){
   const pct = m.percent.toFixed(1);
   const pctLabel = `${m.percent.toFixed(0)}%`;
 
-  // 1) Bombona Preta de 50 Litros (Antiespumante)
   if(prod.containerType === 'drum50'){
     return `
       <div class="drum-wrapper" title="Bombona 50L — Nível: ${pct}%">
@@ -1788,7 +1781,6 @@ function buildContainerIllustration(prod, m, liquidBg){
     `;
   }
 
-  // 2) Caixa de Papelão Kraft PuriTec 12,5 kg (Polímero em Pó)
   if(prod.containerType === 'box12kg'){
     return `
       <div class="box-wrapper" title="Caixa PuriTec ${fmt(m.capacity)} kg — Nível: ${pct}%">
@@ -1814,7 +1806,6 @@ function buildContainerIllustration(prod, m, liquidBg){
     `;
   }
 
-  // 3) Tanque IBC Padrão (Soda Líquida & Polímero PAC)
   return `
     <div class="ibc-wrapper" title="IBC ${fmt(m.capacity)} L — Nível: ${pct}%">
       <div class="ibc-cap"></div>
@@ -1890,10 +1881,8 @@ function renderTanks(){
           </span>
         </div>
 
-        <!-- Ilustração específica do recipiente (IBC, Bombona 50L ou Caixa 12,5kg) -->
         ${buildContainerIllustration(prod, m, liquidBg)}
 
-        <!-- Dados detalhados de capacidade e consumo -->
         <div class="bg-[#04132f]/90 border border-blue-900/80 rounded-xl p-2.5 text-[11px] space-y-1.5 mt-2">
           <div class="flex justify-between">
             <span class="text-blue-300">Disponível atual:</span>
@@ -1960,7 +1949,6 @@ function openRefillModal(productKey){
   $('refillTime').value = currentTime();
   $('refillLogHistory').checked = true;
 
-  // Renderiza botões rápidos específicos da embalagem
   const quickBox = $('quickCapButtons');
   quickBox.innerHTML = '';
   (prod.quickPresets || []).forEach(preset => {
@@ -2442,7 +2430,6 @@ function render(){
   $('generalCount').textContent = observations.length;
   $('durationTotal').textContent = fmt(sum('duration')) + ' h';
 
-  // Atualiza os 4 tanques de abastecimento
   renderTanks();
 
   $('rows').innerHTML = '';
@@ -2563,7 +2550,7 @@ function renderChart(list = filtered()){
     labels = [
       'Soda Líquida (L)',
       'Polímero (mL)',
-      'Polímero PAC (L)',
+      'Policloreto de Alumínio (PAC) (L)',
       'Antiespumante (L)'
     ];
 
@@ -2785,9 +2772,6 @@ function printReport(){
     return;
   }
 
-  // O gráfico do relatório é desenhado em SVG independente do canvas.
-  // Isso evita que o serviço de impressão do Android ignore o canvas/imagem.
-
   const treatmentRows = list
     .filter(r => r.type !== 'general')
     .map(r => `
@@ -2834,7 +2818,7 @@ function printReport(){
     : 'VOLUME TRATADO POR ORIGEM';
 
   const chartLabels = isChemChart
-    ? ['Soda líquida (L)', 'Polímero (mL)', 'Polímero PAC (L)', 'Antiespumante (L)']
+    ? ['Soda líquida (L)', 'Polímero (mL)', 'Policloreto de Alumínio (PAC) (L)', 'Antiespumante (L)']
     : ['Fábrica', 'Transporte', 'Exímia', 'IBC'];
 
   const chartValues = isChemChart
@@ -2916,7 +2900,7 @@ function printReport(){
           <tr>
             <th>Soda (L)</th>
             <th>Polímero (mL)</th>
-            <th>PAC (L)</th>
+            <th>Policloreto de Alumínio (PAC) (L)</th>
             <th>Antiespumante (L)</th>
             <th>Volume (L)</th>
           </tr>
@@ -3002,7 +2986,7 @@ function printReport(){
               <th>Tempo h</th>
               <th>Soda L</th>
               <th>Polímero mL</th>
-              <th>PAC L</th>
+              <th>Policloreto de Alumínio (PAC) L</th>
               <th>Anti L</th>
               <th>pH E/S</th>
               <th>NTU</th>
@@ -3080,7 +3064,6 @@ function printReport(){
     </div>
   `;
 
-  // Aguarda o navegador preparar o conteúdo para impressão
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       window.print();
