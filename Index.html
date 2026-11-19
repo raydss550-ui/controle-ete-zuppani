@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#061b43">
 <title>Controle ETE Zuppani Advanced</title>
-<link rel="icon" href="zupp-banner.jpg">
+<link rel="icon" href="zupp-banner.jpg" onerror="this.removeAttribute('href')">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -80,12 +79,17 @@ textarea.field{
   color:#dbeafe;
 }
 
+.success-btn{
+  background:linear-gradient(100deg,#059669,#10b981);
+  color:white;
+}
+
 .muted{color:#9db8e7}
 
 .login-bg{
   background:
-  linear-gradient(180deg,rgba(2,10,29,.18),rgba(2,10,29,.88)),
-  url('zupp-banner.jpg') center/cover no-repeat;
+  linear-gradient(180deg,rgba(2,10,29,.25),rgba(2,10,29,.90)),
+  radial-gradient(circle at 50% 20%, #1d4ed8 0%, #061b43 70%);
 }
 
 .role.active{
@@ -101,6 +105,368 @@ textarea.field{
   border-radius:15px;
   padding:16px;
   min-width:0;
+}
+
+/* ============================================
+   TANQUES / IBCs DINÂMICOS
+   ============================================ */
+
+.tank-card{
+  background:linear-gradient(160deg,rgba(10,34,82,.94),rgba(4,16,42,.96));
+  border:1px solid rgba(96,165,250,.28);
+  border-radius:16px;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:transform .2s, border-color .2s;
+}
+
+.tank-card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(125,211,252,.55);
+}
+
+.ibc-wrapper{
+  position:relative;
+  width:108px;
+  height:124px;
+  margin:10px auto;
+}
+
+.ibc-cap{
+  width:28px;
+  height:8px;
+  background:#e21d36;
+  border-radius:4px 4px 0 0;
+  margin:0 auto;
+  border:1px solid rgba(255,255,255,.35);
+}
+
+.ibc-body{
+  position:relative;
+  width:100%;
+  height:102px;
+  background:rgba(4,19,47,.88);
+  border:2px solid #93c5fd;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:inset 0 0 16px rgba(0,0,0,.7);
+}
+
+/* Grade metálica do IBC */
+.ibc-cage{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:3;
+  background-image:
+    linear-gradient(to right, rgba(203,213,225,.28) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(203,213,225,.28) 1px, transparent 1px);
+  background-size:25% 25%;
+}
+
+/* Marcações de escala lateral */
+.ibc-ticks{
+  position:absolute;
+  right:5px;
+  top:6px;
+  bottom:6px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  font-size:8px;
+  font-weight:bold;
+  color:rgba(255,255,255,.65);
+  z-index:4;
+  pointer-events:none;
+}
+
+.ibc-liquid{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:100%;
+  transition:height .65s cubic-bezier(.22,1,.36,1), background .4s ease;
+  z-index:1;
+}
+
+.ibc-wave{
+  position:absolute;
+  top:-6px;
+  left:-25%;
+  width:150%;
+  height:12px;
+  border-radius:50%;
+  background:rgba(255,255,255,.32);
+  animation:waveMove 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes waveMove{
+  0%{transform:translateX(-6%) scaleY(.85)}
+  100%{transform:translateX(6%) scaleY(1.15)}
+}
+
+.ibc-percent-badge{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:5;
+  font-weight:900;
+  font-size:17px;
+  color:#ffffff;
+  text-shadow:0 2px 6px rgba(0,0,0,.95);
+  pointer-events:none;
+}
+
+.ibc-pallet{
+  width:104%;
+  margin-left:-2%;
+  height:10px;
+  background:linear-gradient(90deg,#334155,#64748b,#334155);
+  border-radius:3px;
+  margin-top:2px;
+  border:1px solid #94a3b8;
+}
+
+/* ============================================
+   BOMBONA PRETA 50L (ANTIESPUMANTE)
+   ============================================ */
+.drum-wrapper{
+  position:relative;
+  width:96px;
+  height:124px;
+  margin:10px auto;
+}
+
+.drum-top-handles{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  padding:0 12px;
+  height:10px;
+}
+
+.drum-handle{
+  width:20px;
+  height:8px;
+  background:#1e293b;
+  border:1.5px solid #64748b;
+  border-radius:4px 4px 0 0;
+}
+
+.drum-cap{
+  width:16px;
+  height:6px;
+  background:#0f172a;
+  border:1px solid #94a3b8;
+  border-radius:2px 2px 0 0;
+}
+
+.drum-body{
+  position:relative;
+  width:100%;
+  height:112px;
+  background:linear-gradient(90deg, #090d16 0%, #1e293b 32%, #0f172a 75%, #060911 100%);
+  border:2px solid #475569;
+  border-radius:18px / 14px;
+  overflow:hidden;
+  box-shadow:inset 0 0 14px rgba(0,0,0,.9), 0 4px 10px rgba(0,0,0,.45);
+}
+
+/* Nervuras estruturais da bombona */
+.drum-rib-top{
+  position:absolute;
+  top:22px;
+  left:0;
+  right:0;
+  height:3px;
+  background:rgba(148,163,184,.22);
+  z-index:3;
+}
+
+.drum-rib-bottom{
+  position:absolute;
+  bottom:20px;
+  left:0;
+  right:0;
+  height:3px;
+  background:rgba(148,163,184,.22);
+  z-index:3;
+}
+
+/* Etiqueta branca frontal estilo Zuppani / GR Water */
+.drum-label{
+  position:absolute;
+  top:27px;
+  left:10px;
+  right:24px;
+  height:42px;
+  background:rgba(248,250,252,.92);
+  border-radius:3px;
+  padding:3px 4px;
+  z-index:3;
+  box-shadow:0 1px 3px rgba(0,0,0,.6);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  pointer-events:none;
+}
+
+.drum-label-tag{
+  font-size:6px;
+  font-weight:900;
+  color:#0f172a;
+  line-height:1.1;
+  letter-spacing:-0.02em;
+}
+
+.drum-label-sub{
+  font-size:5.5px;
+  font-weight:700;
+  color:#0369a1;
+  border-top:1px solid #cbd5e1;
+  padding-top:1px;
+}
+
+/* Visor lateral translúcido de nível */
+.drum-sight{
+  position:absolute;
+  top:10px;
+  bottom:10px;
+  right:7px;
+  width:12px;
+  background:rgba(2,6,23,.85);
+  border:1px solid #94a3b8;
+  border-radius:6px;
+  overflow:hidden;
+  z-index:4;
+}
+
+.drum-liquid{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  transition:height .65s cubic-bezier(.22,1,.36,1), background .4s ease;
+}
+
+/* ============================================
+   CAIXA DE POLÍMERO EM PÓ 12,5 KG (PURITEC)
+   ============================================ */
+.box-wrapper{
+  position:relative;
+  width:104px;
+  height:124px;
+  margin:10px auto;
+}
+
+/* Saco plástico interno saindo no topo da caixa */
+.box-liner{
+  width:52px;
+  height:11px;
+  margin:0 auto -2px auto;
+  background:linear-gradient(135deg, rgba(255,255,255,.65), rgba(226,232,240,.35));
+  border:1px solid rgba(255,255,255,.55);
+  border-radius:6px 10px 0 0;
+  transform:rotate(-3deg);
+  position:relative;
+  z-index:1;
+}
+
+.box-body{
+  position:relative;
+  width:100%;
+  height:113px;
+  background:linear-gradient(145deg, #d6b485 0%, #be9660 60%, #a37b46 100%);
+  border:2px solid #e7cba3;
+  border-radius:5px;
+  overflow:hidden;
+  box-shadow:inset 0 0 12px rgba(69,39,9,.35), 0 4px 10px rgba(0,0,0,.45);
+  z-index:2;
+}
+
+/* Fita adesiva central */
+.box-tape{
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:50%;
+  width:14px;
+  transform:translateX(-50%);
+  background:rgba(245,222,179,.28);
+  border-left:1px dashed rgba(120,72,20,.25);
+  border-right:1px dashed rgba(120,72,20,.25);
+  z-index:2;
+  pointer-events:none;
+}
+
+/* Preenchimento interno de pó granular */
+.box-powder{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  transition:height .65s cubic-bezier(.22,1,.36,1), background .4s ease;
+  z-index:1;
+  opacity:.88;
+  border-top:2px dashed rgba(255,255,255,.75);
+}
+
+/* Emblema PuriTec */
+.box-brand{
+  position:relative;
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  height:100%;
+  padding-top:4px;
+  pointer-events:none;
+}
+
+.box-leaf{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#2e7d32;
+  border:1.5px solid rgba(255,255,255,.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 4px rgba(0,0,0,.35);
+}
+
+.box-brand-text{
+  font-size:10px;
+  font-weight:900;
+  color:#1c1917;
+  letter-spacing:.03em;
+  margin-top:2px;
+  text-shadow:0 1px 0 rgba(255,255,255,.45);
+}
+
+.box-weight-tag{
+  font-size:8px;
+  font-weight:800;
+  background:#1c1917;
+  color:#fef3c7;
+  padding:1px 5px;
+  border-radius:3px;
+  margin-top:2px;
+}
+
+.pulse-low{
+  animation:pulseBorder 1.5s infinite;
+}
+
+@keyframes pulseBorder{
+  0%,100%{border-color:rgba(244,63,94,.45)}
+  50%{border-color:rgba(244,63,94,1); box-shadow:0 0 18px rgba(244,63,94,.35)}
 }
 
 table{
@@ -261,11 +627,12 @@ class="login-bg min-h-screen flex items-center justify-center p-4">
 
     <div class="text-center mb-6">
 
-      <div class="mx-auto rounded-2xl overflow-hidden border border-blue-300/40 shadow-xl mb-5"
+      <div class="mx-auto rounded-2xl overflow-hidden border border-blue-300/40 shadow-xl mb-5 bg-[#04132f] flex items-center justify-center"
       style="height:112px">
 
         <img src="zupp-banner.jpg"
         alt="Zuppani"
+        onerror="this.onerror=null;this.src='https://placehold.co/600x200/061b43/60a5fa?text=ZUPPANI+INDUSTRIAL+ETE';"
         class="w-full h-full object-cover">
 
       </div>
@@ -355,8 +722,10 @@ class="login-bg min-h-screen flex items-center justify-center p-4">
 
     <div class="flex items-center gap-3 min-w-0">
 
-      <div class="w-16 h-10 rounded-lg overflow-hidden border border-blue-400/40 shrink-0">
+      <div class="w-16 h-10 rounded-lg overflow-hidden border border-blue-400/40 shrink-0 bg-[#04132f]">
         <img src="zupp-banner.jpg"
+        alt="Logo Zuppani"
+        onerror="this.onerror=null;this.src='https://placehold.co/160x100/061b43/60a5fa?text=ZUPP';"
         class="w-full h-full object-cover">
       </div>
 
@@ -445,7 +814,7 @@ class="login-bg min-h-screen flex items-center justify-center p-4">
 
   <div class="kpi" style="--accent:#60a5fa">
     <div class="text-[10px] uppercase font-bold text-blue-200">
-      Soda cáustica
+      Soda líquida
     </div>
 
     <div id="kSoda" class="text-2xl font-black mt-2">
@@ -465,7 +834,7 @@ class="login-bg min-h-screen flex items-center justify-center p-4">
 
   <div class="kpi" style="--accent:#fbbf24">
     <div class="text-[10px] uppercase font-bold text-blue-200">
-      Cloreto de alumínio
+      Polímero PAC (Cloreto)
     </div>
 
     <div id="kChlor" class="text-2xl font-black mt-2">
@@ -481,6 +850,32 @@ class="login-bg min-h-screen flex items-center justify-center p-4">
     <div id="kVolume" class="text-2xl font-black mt-2">
       0 L
     </div>
+  </div>
+
+</section>
+
+
+<!-- CONTROLE DE PRODUTOS DE ABASTECIMENTO (4 RESERVATÓRIOS / IBCs) -->
+
+<section id="supplySection" class="glass rounded-2xl p-4">
+
+  <div class="flex flex-wrap items-center justify-between gap-2 mb-4 border-b border-blue-900/80 pb-3">
+    <div>
+      <h2 class="font-black text-sm sm:text-base flex items-center gap-2">
+        🛢️ Controle de Produtos de Abastecimento (Reservatórios / IBCs)
+      </h2>
+      <p class="text-[11px] text-blue-300 mt-0.5">
+        Nível atualizado automaticamente em % e litros conforme o consumo diário dos lançamentos.
+      </p>
+    </div>
+
+    <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-700/60">
+      INTEGRAÇÃO AUTOMÁTICA ATIVA
+    </span>
+  </div>
+
+  <div id="tanksGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    <!-- Renderizado dinamicamente via JavaScript -->
   </div>
 
 </section>
@@ -566,7 +961,7 @@ class="login-bg min-h-screen flex items-center justify-center p-4">
         </label>
 
         <label class="text-[11px] text-blue-200">
-          Soda cáustica (L)
+          Soda líquida (L)
 
           <input id="soda"
           type="number"
@@ -577,18 +972,19 @@ class="login-bg min-h-screen flex items-center justify-center p-4">
         </label>
 
         <label class="text-[11px] text-blue-200">
-          Polímero (mL)
+          Polímero em pó (mL copinho)
 
           <input id="poly"
           type="number"
           min="0"
           step=".01"
           class="field mt-1"
+          placeholder="Ex: 150"
           value="0">
         </label>
 
         <label class="text-[11px] text-blue-200">
-          Cloreto alumínio (L)
+          Polímero PAC / Cloreto (L)
 
           <input id="chlor"
           type="number"
@@ -871,7 +1267,7 @@ class="glass rounded-2xl p-4">
           <th>Tempo (h)</th>
           <th>Soda</th>
           <th>Polímero</th>
-          <th>Cloreto</th>
+          <th>Polímero PAC</th>
           <th>Antiesp.</th>
           <th>pH E/S</th>
           <th>Turbidez</th>
@@ -901,6 +1297,90 @@ class="glass rounded-2xl p-4">
 </footer>
 
 </main>
+</div>
+
+
+<!-- MODAL REABASTECIMENTO DE PRODUTO -->
+
+<div id="refillModal"
+class="hidden fixed inset-0 z-50 bg-black/80 p-4 flex items-center justify-center">
+
+  <div class="glass rounded-2xl p-5 w-full max-w-md border border-cyan-500/40">
+
+    <div class="flex justify-between items-center mb-3">
+      <h3 id="refillTitle" class="font-black text-base text-cyan-200">
+        Reabastecer Produto
+      </h3>
+      <button type="button" onclick="closeRefillModal()" class="text-blue-200 hover:text-white px-2">✕</button>
+    </div>
+
+    <p id="refillSubtitle" class="text-xs text-blue-200 mb-4">
+      Informe o volume total abastecido (ex.: IBC de 800 litros) para redefinir o nível para 100%.
+    </p>
+
+    <form id="refillForm" class="space-y-3">
+      <input type="hidden" id="refillProductKey">
+
+      <div class="grid grid-cols-2 gap-3">
+        <label class="text-xs text-blue-100 font-bold">
+          Data do abastecimento
+          <input id="refillDate" type="date" class="field mt-1" required>
+        </label>
+
+        <label class="text-xs text-blue-100 font-bold">
+          Horário
+          <input id="refillTime" type="time" class="field mt-1" required>
+        </label>
+      </div>
+
+      <label class="block text-xs text-blue-100 font-bold">
+        Volume / Peso total abastecido (<span id="refillUnitLabel">Litros</span>)
+        <input id="refillCapacityInput"
+        type="number"
+        min="0.1"
+        step="0.01"
+        class="field mt-1"
+        placeholder="Ex: 800"
+        required>
+      </label>
+
+      <!-- Campo exclusivo de densidade do pó para conversão mL -> kg -->
+      <div id="powderDensityBox" class="hidden bg-amber-950/50 border border-amber-600/50 rounded-xl p-2.5 space-y-1.5">
+        <label class="block text-[11px] text-amber-200 font-bold">
+          Equivalência do copinho medidor (g por mL)
+          <input id="refillDensityInput"
+          type="number"
+          min="0.1"
+          max="2.5"
+          step="0.01"
+          class="field mt-1 !py-1.5 text-xs"
+          value="0.75">
+        </label>
+        <p class="text-[10px] text-amber-100/80 leading-tight">
+          Como o polímero é em pó (caixa de <b>12,5 kg</b>) e dosado em <b>mL no copinho</b>, o sistema converte automaticamente cada mL lançado em gramas/quilos (padrão: 100 mL ≈ 75 g).
+        </p>
+      </div>
+
+      <div id="quickCapButtons" class="flex flex-wrap gap-2 pt-1">
+        <!-- Botões de atalho preenchidos dinamicamente conforme o tipo de embalagem -->
+      </div>
+
+      <label class="flex items-center gap-2 text-xs text-cyan-200 pt-1 cursor-pointer">
+        <input id="refillLogHistory" type="checkbox" checked class="accent-rose-600 w-4 h-4">
+        Registrar este reabastecimento no histórico de observações
+      </label>
+
+      <div class="flex gap-2 pt-2">
+        <button type="submit" class="btn success-btn flex-1">
+          ✓ Confirmar Reabastecimento 100%
+        </button>
+        <button type="button" class="btn secondary" onclick="closeRefillModal()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+
+  </div>
 </div>
 
 
@@ -948,6 +1428,18 @@ class="hidden fixed inset-0 z-50 bg-black/80 p-4 flex items-center justify-cente
 </div>
 
 
+<!-- MODAL DE NOTIFICAÇÃO / CONFIRMAÇÃO CUSTOMIZADA (SEM alert/confirm NATIVOS) -->
+
+<div id="uiDialog"
+class="hidden fixed inset-0 z-50 bg-black/80 p-4 flex items-center justify-center">
+  <div class="glass rounded-2xl p-5 w-full max-w-sm border border-blue-400/40 shadow-2xl">
+    <h3 id="uiDialogTitle" class="font-black text-base text-cyan-200 mb-2">Aviso</h3>
+    <p id="uiDialogMessage" class="text-xs text-blue-100 leading-relaxed mb-4"></p>
+    <div id="uiDialogActions" class="flex justify-end gap-2"></div>
+  </div>
+</div>
+
+
 <!-- ÁREA DE IMPRESSÃO -->
 
 <div id="print-area" class="hidden"></div>
@@ -956,13 +1448,15 @@ class="hidden fixed inset-0 z-50 bg-black/80 p-4 flex items-center justify-cente
 <script>
 
 // ============================================
-// CONFIGURAÇÕES
+// CONFIGURAÇÕES E ESTADO
 // ============================================
 
 const KEY = 'ete_zuppani_advanced_v5';
+const SUPPLY_KEY = 'ete_zuppani_supplies_v1';
 
 let role = 'operador';
 let records = [];
+let supplies = {};
 let chart = null;
 let photoData = '';
 
@@ -970,7 +1464,6 @@ const $ = id => document.getElementById(id);
 
 const today = () => {
   const d = new Date();
-
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 };
 
@@ -993,72 +1486,567 @@ function escapeHTML(value){
   })[c]);
 }
 
+// ============================================
+// DIÁLOGOS CUSTOMIZADOS (SEM alert/confirm)
+// ============================================
+
+function showNotice(message, title = 'Sistema ETE Zuppani'){
+  $('uiDialogTitle').textContent = title;
+  $('uiDialogMessage').textContent = message;
+  const actions = $('uiDialogActions');
+  actions.innerHTML = '';
+  const ok = document.createElement('button');
+  ok.type = 'button';
+  ok.className = 'btn primary';
+  ok.textContent = 'OK';
+  ok.onclick = () => $('uiDialog').classList.add('hidden');
+  actions.appendChild(ok);
+  $('uiDialog').classList.remove('hidden');
+}
+
+function showConfirm(message, onConfirm, title = 'Confirmação'){
+  $('uiDialogTitle').textContent = title;
+  $('uiDialogMessage').textContent = message;
+  const actions = $('uiDialogActions');
+  actions.innerHTML = '';
+
+  const cancel = document.createElement('button');
+  cancel.type = 'button';
+  cancel.className = 'btn secondary';
+  cancel.textContent = 'Cancelar';
+  cancel.onclick = () => $('uiDialog').classList.add('hidden');
+
+  const confirmBtn = document.createElement('button');
+  confirmBtn.type = 'button';
+  confirmBtn.className = 'btn primary';
+  confirmBtn.textContent = 'Confirmar';
+  confirmBtn.onclick = () => {
+    $('uiDialog').classList.add('hidden');
+    if(typeof onConfirm === 'function') onConfirm();
+  };
+
+  actions.append(cancel, confirmBtn);
+  $('uiDialog').classList.remove('hidden');
+}
+
+
+// ============================================
+// DEFINIÇÃO DOS 4 PRODUTOS DE ABASTECIMENTO
+// ============================================
+
+const PRODUCT_DEFS = [
+  {
+    key: 'soda',
+    recordField: 'soda',
+    containerType: 'ibc',
+    name: 'Soda Líquida',
+    subtitle: 'IBC 800 L • Ajuste de pH',
+    unit: 'L',
+    unitFull: 'Litros (L)',
+    defaultCapacity: 800,
+    quickPresets: [
+      { label: 'IBC 800 L', value: 800 },
+      { label: 'IBC 1000 L', value: 1000 },
+      { label: '500 L', value: 500 }
+    ],
+    colorGradient: 'linear-gradient(180deg, #60a5fa 0%, #2563eb 100%)',
+    accent: '#60a5fa'
+  },
+  {
+    key: 'chlor',
+    recordField: 'chlor',
+    containerType: 'ibc',
+    name: 'Polímero PAC',
+    subtitle: 'IBC 800 L • Coagulante',
+    unit: 'L',
+    unitFull: 'Litros (L)',
+    defaultCapacity: 800,
+    quickPresets: [
+      { label: 'IBC 800 L', value: 800 },
+      { label: 'IBC 1000 L', value: 1000 },
+      { label: '500 L', value: 500 }
+    ],
+    colorGradient: 'linear-gradient(180deg, #fbbf24 0%, #d97706 100%)',
+    accent: '#fbbf24'
+  },
+  {
+    key: 'anti',
+    recordField: 'anti',
+    containerType: 'drum50',
+    name: 'Antiespumante',
+    subtitle: 'Bombona Preta • 50 Litros',
+    unit: 'L',
+    unitFull: 'Litros (L)',
+    defaultCapacity: 50,
+    quickPresets: [
+      { label: 'Bombona 50 L', value: 50 },
+      { label: '25 L (Meia)', value: 25 },
+      { label: '20 L', value: 20 }
+    ],
+    colorGradient: 'linear-gradient(180deg, #38bdf8 0%, #0284c7 100%)',
+    accent: '#38bdf8'
+  },
+  {
+    key: 'poly',
+    recordField: 'poly',
+    containerType: 'box12kg',
+    name: 'Polímero (Pó)',
+    subtitle: 'Caixa PuriTec 12,5 kg • Dosado em mL',
+    unit: 'kg',
+    unitFull: 'Quilos (kg)',
+    defaultCapacity: 12.5,
+    defaultDensity: 0.75, // 1 mL no copinho = 0,75 g (0,00075 kg)
+    quickPresets: [
+      { label: 'Caixa 12,5 kg', value: 12.5 },
+      { label: '2 Caixas (25 kg)', value: 25 },
+      { label: 'Meia Caixa (6,25 kg)', value: 6.25 }
+    ],
+    colorGradient: 'linear-gradient(180deg, #4ade80 0%, #15803d 100%)',
+    accent: '#34d399'
+  }
+];
+
+function defaultSuppliesState(){
+  const nowStr = `${today()} ${currentTime()}`;
+  const state = {};
+  PRODUCT_DEFS.forEach(p => {
+    state[p.key] = {
+      capacity: p.defaultCapacity,
+      density: p.defaultDensity || 1,
+      refilledAt: nowStr,
+      refillTimestamp: 0
+    };
+  });
+  return state;
+}
+
+function loadSupplies(){
+  try{
+    const raw = JSON.parse(localStorage.getItem(SUPPLY_KEY) || 'null');
+    const base = defaultSuppliesState();
+    if(raw && typeof raw === 'object'){
+      PRODUCT_DEFS.forEach(p => {
+        if(raw[p.key] && typeof raw[p.key] === 'object'){
+          base[p.key] = {
+            capacity: Number(raw[p.key].capacity) > 0 ? Number(raw[p.key].capacity) : p.defaultCapacity,
+            density: Number(raw[p.key].density) > 0 ? Number(raw[p.key].density) : (p.defaultDensity || 1),
+            refilledAt: raw[p.key].refilledAt || base[p.key].refilledAt,
+            refillTimestamp: Number(raw[p.key].refillTimestamp) || 0
+          };
+        }
+      });
+    }
+    supplies = base;
+    persistSupplies();
+  }catch(e){
+    supplies = defaultSuppliesState();
+    console.error('Erro ao carregar abastecimentos:', e);
+  }
+}
+
+function persistSupplies(){
+  try{
+    localStorage.setItem(SUPPLY_KEY, JSON.stringify(supplies));
+  }catch(e){
+    console.error('Erro ao salvar abastecimentos:', e);
+  }
+}
+
+function getRecordTimestamp(r){
+  if(r.createdAt && !isNaN(Number(r.createdAt))){
+    return Number(r.createdAt);
+  }
+  const dt = new Date(`${r.date}T${r.time || '00:00'}:00`);
+  return isNaN(dt.getTime()) ? 0 : dt.getTime();
+}
+
+function calculateTankMetrics(prod){
+  const cfg = supplies[prod.key] || {
+    capacity: prod.defaultCapacity,
+    density: prod.defaultDensity || 1,
+    refilledAt: `${today()} ${currentTime()}`,
+    refillTimestamp: 0
+  };
+
+  const capacity = Number(cfg.capacity) || prod.defaultCapacity;
+  const density = Number(cfg.density) || prod.defaultDensity || 1;
+  const refillTs = Number(cfg.refillTimestamp) || 0;
+
+  // Soma o consumo bruto registrado nos lançamentos após o último reabastecimento 100%
+  const rawConsumedSinceRefill = records
+    .filter(r => r.type !== 'general' && getRecordTimestamp(r) >= refillTs)
+    .reduce((acc, r) => acc + (Number(r[prod.recordField]) || 0), 0);
+
+  // Consumo apenas do dia de referência selecionado
+  const refDate = $('filterDate').value || today();
+  const rawConsumedToday = records
+    .filter(r => r.type !== 'general' && r.date === refDate)
+    .reduce((acc, r) => acc + (Number(r[prod.recordField]) || 0), 0);
+
+  // Para o Polímero em pó: o lançamento é em mL no copinho, convertido para kg: (mL * densidade_g_ml) / 1000
+  const isPowderBox = prod.containerType === 'box12kg';
+  const consumedSinceRefill = isPowderBox
+    ? (rawConsumedSinceRefill * density) / 1000
+    : rawConsumedSinceRefill;
+
+  const consumedToday = isPowderBox
+    ? (rawConsumedToday * density) / 1000
+    : rawConsumedToday;
+
+  const remaining = Math.max(0, capacity - consumedSinceRefill);
+  const percent = capacity > 0 ? Math.max(0, Math.min(100, (remaining / capacity) * 100)) : 0;
+
+  return {
+    capacity,
+    remaining,
+    percent,
+    consumedSinceRefill,
+    consumedToday,
+    rawConsumedToday,
+    rawConsumedSinceRefill,
+    density,
+    refilledAt: cfg.refilledAt
+  };
+}
+
+function buildContainerIllustration(prod, m, liquidBg){
+  const pct = m.percent.toFixed(1);
+  const pctLabel = `${m.percent.toFixed(0)}%`;
+
+  // 1) Bombona Preta de 50 Litros (Antiespumante)
+  if(prod.containerType === 'drum50'){
+    return `
+      <div class="drum-wrapper" title="Bombona 50L — Nível: ${pct}%">
+        <div class="drum-top-handles">
+          <div class="drum-handle"></div>
+          <div class="drum-cap"></div>
+          <div class="drum-handle"></div>
+        </div>
+        <div class="drum-body">
+          <div class="drum-rib-top"></div>
+          <div class="drum-rib-bottom"></div>
+          <div class="drum-label">
+            <div class="drum-label-tag">COD.PROD-403390<br>ANTIESPUMANTE</div>
+            <div class="drum-label-sub">BOMBONA 50 L</div>
+          </div>
+          <div class="drum-sight">
+            <div class="drum-liquid" style="height:${pct}%; background:${liquidBg}"></div>
+          </div>
+          <div class="ibc-percent-badge" style="padding-right:12px;">
+            ${pctLabel}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // 2) Caixa de Papelão Kraft PuriTec 12,5 kg (Polímero em Pó)
+  if(prod.containerType === 'box12kg'){
+    return `
+      <div class="box-wrapper" title="Caixa PuriTec ${fmt(m.capacity)} kg — Nível: ${pct}%">
+        <div class="box-liner"></div>
+        <div class="box-body">
+          <div class="box-tape"></div>
+          <div class="box-powder" style="height:${pct}%; background:${liquidBg}"></div>
+          <div class="box-brand">
+            <div class="box-leaf">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M17 3C11 3 5 7 5 14C5 16.5 6 18.5 7.5 20L14 13.5" stroke="#dcfce7" stroke-width="2.2" stroke-linecap="round"/>
+                <path d="M17 3C19 7 18.5 13 14 17.5C11.5 20 8.5 20.5 7.5 20" stroke="#bbf7d0" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="box-brand-text">PURITEC</div>
+            <div class="box-weight-tag">${fmt(m.capacity)} kg</div>
+          </div>
+          <div class="ibc-percent-badge" style="align-items:flex-end; padding-bottom:6px;">
+            <span style="background:rgba(2,6,23,.78); padding:1px 7px; border-radius:6px; font-size:14px;">${pctLabel}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // 3) Tanque IBC Padrão (Soda Líquida & Polímero PAC)
+  return `
+    <div class="ibc-wrapper" title="IBC ${fmt(m.capacity)} L — Nível: ${pct}%">
+      <div class="ibc-cap"></div>
+      <div class="ibc-body">
+        <div class="ibc-cage"></div>
+        <div class="ibc-ticks">
+          <span>100%</span>
+          <span>75%</span>
+          <span>50%</span>
+          <span>25%</span>
+        </div>
+        <div class="ibc-liquid" style="height:${pct}%; background:${liquidBg}">
+          <div class="ibc-wave"></div>
+        </div>
+        <div class="ibc-percent-badge">
+          ${pctLabel}
+        </div>
+      </div>
+      <div class="ibc-pallet"></div>
+    </div>
+  `;
+}
+
+function renderTanks(){
+  const grid = $('tanksGrid');
+  if(!grid) return;
+
+  grid.innerHTML = '';
+
+  PRODUCT_DEFS.forEach(prod => {
+    const m = calculateTankMetrics(prod);
+    const isLow = m.percent <= 20;
+    const isMedium = m.percent > 20 && m.percent <= 45;
+
+    let statusText = 'NÍVEL NORMAL';
+    let statusClass = 'bg-emerald-950/90 text-emerald-300 border-emerald-700/60';
+    let liquidBg = prod.colorGradient;
+
+    if(isLow){
+      statusText = 'NÍVEL CRÍTICO — REABASTECER';
+      statusClass = 'bg-rose-950/90 text-rose-300 border-rose-600/80';
+      liquidBg = 'linear-gradient(180deg, #fb7185 0%, #e11d48 100%)';
+    }else if(isMedium){
+      statusText = 'ATENÇÃO — NÍVEL MÉDIO';
+      statusClass = 'bg-amber-950/90 text-amber-300 border-amber-600/70';
+    }
+
+    const formattedRefillDate = m.refilledAt
+      ? m.refilledAt.replace(/^(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1')
+      : '-';
+
+    const isPowder = prod.containerType === 'box12kg';
+    const todayDetail = isPowder
+      ? `-${fmt(m.consumedToday)} kg (${fmt(m.rawConsumedToday)} mL)`
+      : `-${fmt(m.consumedToday)} ${prod.unit}`;
+
+    const totalDetail = isPowder
+      ? `${fmt(m.consumedSinceRefill)} kg (${fmt(m.rawConsumedSinceRefill)} mL)`
+      : `${fmt(m.consumedSinceRefill)} ${prod.unit}`;
+
+    const card = document.createElement('div');
+    card.className = `tank-card ${isLow ? 'pulse-low' : ''}`;
+
+    card.innerHTML = `
+      <div>
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <h3 class="font-black text-sm text-white">${escapeHTML(prod.name)}</h3>
+            <p class="text-[10px] text-blue-300">${escapeHTML(prod.subtitle)}</p>
+          </div>
+          <span class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusClass} text-right">
+            ${statusText}
+          </span>
+        </div>
+
+        <!-- Ilustração específica do recipiente (IBC, Bombona 50L ou Caixa 12,5kg) -->
+        ${buildContainerIllustration(prod, m, liquidBg)}
+
+        <!-- Dados detalhados de capacidade e consumo -->
+        <div class="bg-[#04132f]/90 border border-blue-900/80 rounded-xl p-2.5 text-[11px] space-y-1.5 mt-2">
+          <div class="flex justify-between">
+            <span class="text-blue-300">Disponível atual:</span>
+            <b class="text-white">${fmt(m.remaining)} ${prod.unit}</b>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-blue-300">Carga cheia (100%):</span>
+            <b class="text-cyan-300">${fmt(m.capacity)} ${prod.unit}</b>
+          </div>
+          <div class="flex justify-between gap-1">
+            <span class="text-blue-300 shrink-0">Uso na data ref.:</span>
+            <b class="text-amber-300 text-right">${todayDetail}</b>
+          </div>
+          <div class="flex justify-between gap-1">
+            <span class="text-blue-300 shrink-0">Uso acumulado:</span>
+            <span class="text-blue-100 text-right">${totalDetail}</span>
+          </div>
+          <div class="pt-1 border-t border-blue-900/70 text-[10px] text-blue-300/80 flex justify-between">
+            <span>Último 100%:</span>
+            <span>${escapeHTML(formattedRefillDate)}</span>
+          </div>
+        </div>
+      </div>
+
+      <button type="button"
+        class="btn success-btn w-full mt-3 flex items-center justify-center gap-1.5"
+        onclick="openRefillModal('${prod.key}')">
+        <span>🔄</span>
+        <span>Reabastecido 100%</span>
+      </button>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+function openRefillModal(productKey){
+  const prod = PRODUCT_DEFS.find(p => p.key === productKey);
+  if(!prod) return;
+
+  const currentCfg = supplies[productKey] || {
+    capacity: prod.defaultCapacity,
+    density: prod.defaultDensity || 1
+  };
+
+  $('refillProductKey').value = prod.key;
+  $('refillTitle').textContent = `Reabastecer: ${prod.name}`;
+
+  if(prod.containerType === 'box12kg'){
+    $('refillSubtitle').textContent = 'Informe o peso da caixa abastecida (padrão: 12,5 kg) para redefinir o estoque para 100%.';
+    $('powderDensityBox').classList.remove('hidden');
+    $('refillDensityInput').value = currentCfg.density || 0.75;
+  }else if(prod.containerType === 'drum50'){
+    $('refillSubtitle').textContent = 'Informe o volume da bombona abastecida (padrão: 50 litros) para marcar 100%.';
+    $('powderDensityBox').classList.add('hidden');
+  }else{
+    $('refillSubtitle').textContent = `Informe o volume total abastecido no IBC de ${prod.name} (ex.: 800 L) para marcar 100%.`;
+    $('powderDensityBox').classList.add('hidden');
+  }
+
+  $('refillUnitLabel').textContent = prod.unitFull;
+  $('refillCapacityInput').value = currentCfg.capacity;
+  $('refillDate').value = today();
+  $('refillTime').value = currentTime();
+  $('refillLogHistory').checked = true;
+
+  // Renderiza botões rápidos específicos da embalagem
+  const quickBox = $('quickCapButtons');
+  quickBox.innerHTML = '';
+  (prod.quickPresets || []).forEach(preset => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'btn secondary text-[11px] py-1.5 px-2.5';
+    b.textContent = preset.label;
+    b.onclick = () => {
+      $('refillCapacityInput').value = preset.value;
+    };
+    quickBox.appendChild(b);
+  });
+
+  $('refillModal').classList.remove('hidden');
+}
+
+function closeRefillModal(){
+  $('refillModal').classList.add('hidden');
+}
+
+$('refillForm').addEventListener('submit', e => {
+  e.preventDefault();
+
+  const key = $('refillProductKey').value;
+  const prod = PRODUCT_DEFS.find(p => p.key === key);
+  if(!prod) return;
+
+  const capacity = Number($('refillCapacityInput').value);
+  const rDate = $('refillDate').value;
+  const rTime = $('refillTime').value;
+  const density = prod.containerType === 'box12kg'
+    ? (Number($('refillDensityInput').value) || 0.75)
+    : 1;
+
+  if(!capacity || capacity <= 0){
+    showNotice('Informe um valor válido maior que zero.');
+    return;
+  }
+
+  if(!rDate || !rTime){
+    showNotice('Informe a data e o horário do reabastecimento.');
+    return;
+  }
+
+  const nowTs = Date.now();
+  supplies[key] = {
+    capacity: capacity,
+    density: density,
+    refilledAt: `${rDate} ${rTime}`,
+    refillTimestamp: nowTs
+  };
+
+  persistSupplies();
+
+  if($('refillLogHistory').checked){
+    records.push({
+      id: String(nowTs),
+      createdAt: nowTs,
+      type: 'general',
+      date: rDate,
+      time: rTime,
+      source: 'Abastecimento',
+      volume: 0,
+      duration: 0,
+      durationUnit: 'hours',
+      soda: 0,
+      poly: 0,
+      chlor: 0,
+      anti: 0,
+      phIn: null,
+      phOut: null,
+      turbidity: null,
+      floc: '',
+      notes: `Reabastecimento 100%: ${prod.name} — Carga total: ${fmt(capacity)} ${prod.unit}.`,
+      operator: $('operatorName').value
+    });
+    persist();
+  }
+
+  closeRefillModal();
+  render();
+  showNotice(`${prod.name} reabastecido para 100% (${fmt(capacity)} ${prod.unit}) com sucesso!`);
+});
+
 
 // ============================================
 // LOGIN
 // ============================================
 
 function chooseRole(r){
-
   role = r;
-
-  $('operatorRole').classList.toggle('active',r==='operador');
-
-  $('managerRole').classList.toggle('active',r==='gestor');
-
+  $('operatorRole').classList.toggle('active', r === 'operador');
+  $('managerRole').classList.toggle('active', r === 'gestor');
 }
 
 function entrarSistema(e){
-
   if(e) e.preventDefault();
 
   $('loginError').classList.add('hidden');
-
   $('loginScreen').classList.add('hidden');
-
   $('app').classList.remove('hidden');
 
   $('roleBadge').textContent =
     role === 'gestor' ? 'GESTOR ETE' : 'OPERADOR';
 
-  $('entryPanel').classList.toggle('hidden',role==='gestor');
+  $('entryPanel').classList.toggle('hidden', role === 'gestor');
 
   $('operatorName').value =
     localStorage.getItem('zupp_operator') || 'Operador ETE';
 
   load();
+  loadSupplies();
 
   $('filterDate').value = today();
-
   $('entryDate').value = today();
-
   $('entryTime').value = currentTime();
 
   resetGeneralObservation();
-
   resetForm();
-
   render();
 
-  setTimeout(()=>{
+  setTimeout(() => {
     if(chart) chart.resize();
-  },100);
+  }, 100);
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
-
-  $('loginForm').addEventListener('submit',entrarSistema);
-
+document.addEventListener('DOMContentLoaded', () => {
+  $('loginForm').addEventListener('submit', entrarSistema);
 });
 
 function logout(){
-
   $('app').classList.add('hidden');
-
   $('loginScreen').classList.remove('hidden');
-
-  $('password').value='';
-
+  $('password').value = '';
 }
 
 
@@ -1067,79 +2055,53 @@ function logout(){
 // ============================================
 
 function normalizeRecords(data){
-
-  return data.map(r=>{
-
-    const item={...r};
+  return data.map(r => {
+    const item = { ...r };
 
     if(item.type === 'general'){
-
-      item.type='general';
-
-      item.duration=0;
-
-      item.durationUnit='hours';
-
+      item.type = 'general';
+      item.duration = 0;
+      item.durationUnit = 'hours';
     }else{
-
-      item.type='treatment';
-
-      // Os registros anteriores armazenavam duração em minutos.
-      // Converte uma única vez para horas.
-
+      item.type = 'treatment';
       if(item.durationUnit !== 'hours'){
-
-        item.duration =
-          (Number(item.duration)||0)/60;
-
-        item.durationUnit='hours';
-
+        item.duration = (Number(item.duration) || 0) / 60;
+        item.durationUnit = 'hours';
       }
+    }
 
+    if(!item.createdAt){
+      const numericId = Number(item.id);
+      if(!isNaN(numericId) && numericId > 1600000000000){
+        item.createdAt = numericId;
+      }else{
+        const dt = new Date(`${item.date}T${item.time || '00:00'}:00`);
+        item.createdAt = isNaN(dt.getTime()) ? 0 : dt.getTime();
+      }
     }
 
     return item;
-
   });
-
 }
 
 function load(){
-
   try{
-
-    const saved=JSON.parse(localStorage.getItem(KEY)||'[]');
-
-    records=Array.isArray(saved)
-      ? normalizeRecords(saved)
-      : [];
-
+    const saved = JSON.parse(localStorage.getItem(KEY) || '[]');
+    records = Array.isArray(saved) ? normalizeRecords(saved) : [];
     persist();
-
   }catch(e){
-
-    records=[];
-
-    console.error('Erro ao carregar registros:',e);
-
+    records = [];
+    console.error('Erro ao carregar registros:', e);
   }
-
 }
 
 function persist(){
-
   try{
-
-    localStorage.setItem(KEY,JSON.stringify(records));
-
+    localStorage.setItem(KEY, JSON.stringify(records));
   }catch(e){
-
-    alert('Não foi possível salvar os dados. O armazenamento pode estar cheio. Faça um backup e verifique as fotos.');
-
+    showNotice('Não foi possível salvar os dados. O armazenamento pode estar cheio. Faça um backup e verifique as fotos.');
     console.error(e);
-
   }
-
 }
 
 
@@ -1148,176 +2110,108 @@ function persist(){
 // ============================================
 
 function resetForm(){
-
-  $('entryForm').reset();
-
-  $('editId').value='';
-
-  $('entryDate').value=$('filterDate').value||today();
-
-  $('entryTime').value=currentTime();
-
-  $('formMode').textContent='NOVO';
-
-  photoData='';
-
+  const form = $('entryForm');
+  if(form) form.reset();
+  if($('editId')) $('editId').value = '';
+  if($('entryDate')) $('entryDate').value = ($('filterDate') && $('filterDate').value) || today();
+  if($('entryTime')) $('entryTime').value = currentTime();
+  if($('formMode')) $('formMode').textContent = 'NOVO';
+  photoData = '';
 }
 
-$('photo').addEventListener('change',e=>{
-
-  const f=e.target.files[0];
-
+$('photo').addEventListener('change', e => {
+  const f = e.target.files[0];
   if(!f){
-
-    photoData='';
-
+    photoData = '';
     return;
-
   }
 
-  if(f.size>5*1024*1024){
-
-    alert('A foto deve ter até 5 MB.');
-
-    e.target.value='';
-
+  if(f.size > 5 * 1024 * 1024){
+    showNotice('A foto deve ter até 5 MB.');
+    e.target.value = '';
     return;
-
   }
 
-  const rd=new FileReader();
-
-  rd.onload=()=>{
-
-    const im=new Image();
-
-    im.onload=()=>{
-
-      const c=document.createElement('canvas');
-
-      let w=im.width,h=im.height;
-
-      const s=Math.min(1,1000/Math.max(w,h));
-
-      c.width=Math.round(w*s);
-
-      c.height=Math.round(h*s);
-
-      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-
-      photoData=c.toDataURL('image/jpeg',.72);
-
+  const rd = new FileReader();
+  rd.onload = () => {
+    const im = new Image();
+    im.onload = () => {
+      const c = document.createElement('canvas');
+      let w = im.width, h = im.height;
+      const s = Math.min(1, 1000 / Math.max(w, h));
+      c.width = Math.round(w * s);
+      c.height = Math.round(h * s);
+      c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+      photoData = c.toDataURL('image/jpeg', .72);
     };
-
-    im.src=rd.result;
-
+    im.src = rd.result;
   };
-
   rd.readAsDataURL(f);
-
 });
 
 
-$('entryForm').addEventListener('submit',e=>{
-
+$('entryForm').addEventListener('submit', e => {
   e.preventDefault();
 
-  const item={
+  const existingId = $('editId').value;
+  const nowTs = Date.now();
+  const existingRecord = existingId ? records.find(x => x.id === existingId) : null;
 
-    id:$('editId').value||String(Date.now()),
-
-    type:'treatment',
-
-    date:$('entryDate').value,
-
-    time:$('entryTime').value,
-
-    source:$('source').value,
-
-    volume:num('volume'),
-
-    duration:num('duration'),
-
-    durationUnit:'hours',
-
-    soda:num('soda'),
-
-    poly:num('poly'),
-
-    chlor:num('chlor'),
-
-    anti:num('anti'),
-
-    phIn:$('phIn').value===''?null:num('phIn'),
-
-    phOut:$('phOut').value===''?null:num('phOut'),
-
-    turbidity:$('turbidity').value===''?null:num('turbidity'),
-
-    floc:$('floc').value,
-
-    notes:$('notes').value.trim(),
-
-    photo:photoData
-
+  const item = {
+    id: existingId || String(nowTs),
+    createdAt: existingRecord ? existingRecord.createdAt : nowTs,
+    type: 'treatment',
+    date: $('entryDate').value,
+    time: $('entryTime').value,
+    source: $('source').value,
+    volume: num('volume'),
+    duration: num('duration'),
+    durationUnit: 'hours',
+    soda: num('soda'),
+    poly: num('poly'),
+    chlor: num('chlor'),
+    anti: num('anti'),
+    phIn: $('phIn').value === '' ? null : num('phIn'),
+    phOut: $('phOut').value === '' ? null : num('phOut'),
+    turbidity: $('turbidity').value === '' ? null : num('turbidity'),
+    floc: $('floc').value,
+    notes: $('notes').value.trim(),
+    photo: photoData
   };
 
   if(!item.date || !item.time){
-
-    alert('Informe a data e o horário.');
-
+    showNotice('Informe a data e o horário.');
     return;
-
   }
 
-  if(item.duration<0 || item.volume<0 ||
-     item.soda<0 || item.poly<0 ||
-     item.chlor<0 || item.anti<0){
-
-    alert('Não são permitidos valores negativos.');
-
+  if(item.duration < 0 || item.volume < 0 ||
+     item.soda < 0 || item.poly < 0 ||
+     item.chlor < 0 || item.anti < 0){
+    showNotice('Não são permitidos valores negativos.');
     return;
-
   }
 
-  if(!item.volume&&!item.soda&&!item.poly&&!item.chlor&&!item.anti){
-
-    alert('Informe o volume tratado ou ao menos um reagente.');
-
+  if(!item.volume && !item.soda && !item.poly && !item.chlor && !item.anti){
+    showNotice('Informe o volume tratado ou ao menos um reagente.');
     return;
-
   }
 
-  const i=records.findIndex(x=>x.id===item.id);
+  const i = records.findIndex(x => x.id === item.id);
 
-  if(i>=0){
-
-    // Mantém a foto anterior se o usuário não selecionar outra.
-
+  if(i >= 0){
     if(!item.photo && records[i].photo){
-
-      item.photo=records[i].photo;
-
+      item.photo = records[i].photo;
     }
-
-    records[i]=item;
-
+    records[i] = item;
   }else{
-
     records.push(item);
-
   }
 
   persist();
-
-  $('filterDate').value=item.date;
-
+  $('filterDate').value = item.date;
   resetForm();
-
   render();
-
-  alert('Tratamento salvo com sucesso!');
-
+  showNotice('Tratamento salvo com sucesso e níveis dos reservatórios atualizados!');
 });
 
 
@@ -1326,45 +2220,35 @@ $('entryForm').addEventListener('submit',e=>{
 // ============================================
 
 function editRecord(id){
+  const r = records.find(x => x.id === id);
+  if(!r || r.type === 'general') return;
 
-  const r=records.find(x=>x.id===id);
-
-  if(!r || r.type==='general') return;
-
-  const map={
-
-    editId:'id',
-    entryDate:'date',
-    entryTime:'time',
-    source:'source',
-    volume:'volume',
-    duration:'duration',
-    soda:'soda',
-    poly:'poly',
-    chlor:'chlor',
-    anti:'anti',
-    phIn:'phIn',
-    phOut:'phOut',
-    turbidity:'turbidity',
-    floc:'floc',
-    notes:'notes'
-
+  const map = {
+    editId: 'id',
+    entryDate: 'date',
+    entryTime: 'time',
+    source: 'source',
+    volume: 'volume',
+    duration: 'duration',
+    soda: 'soda',
+    poly: 'poly',
+    chlor: 'chlor',
+    anti: 'anti',
+    phIn: 'phIn',
+    phOut: 'phOut',
+    turbidity: 'turbidity',
+    floc: 'floc',
+    notes: 'notes'
   };
 
-  Object.entries(map).forEach(([el,k])=>{
-
-    $(el).value=r[k]??'';
-
+  Object.entries(map).forEach(([el, k]) => {
+    $(el).value = r[k] ?? '';
   });
 
-  photoData=r.photo||'';
-
-  $('photo').value='';
-
-  $('formMode').textContent='EDITANDO';
-
-  window.scrollTo({top:0,behavior:'smooth'});
-
+  photoData = r.photo || '';
+  $('photo').value = '';
+  $('formMode').textContent = 'EDITANDO';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 
@@ -1373,124 +2257,76 @@ function editRecord(id){
 // ============================================
 
 function resetGeneralObservation(){
-
   $('generalObservationForm').reset();
-
-  $('generalEditId').value='';
-
-  $('generalDate').value=today();
-
-  $('generalTime').value=currentTime();
-
+  $('generalEditId').value = '';
+  $('generalDate').value = today();
+  $('generalTime').value = currentTime();
 }
 
-$('generalObservationForm').addEventListener('submit',e=>{
-
+$('generalObservationForm').addEventListener('submit', e => {
   e.preventDefault();
 
-  const notes=$('generalNotes').value.trim();
-
+  const notes = $('generalNotes').value.trim();
   if(!notes){
-
-    alert('Digite uma observação antes de salvar.');
-
+    showNotice('Digite uma observação antes de salvar.');
     return;
-
   }
 
-  const item={
+  const existingId = $('generalEditId').value;
+  const nowTs = Date.now();
+  const existingRecord = existingId ? records.find(x => x.id === existingId) : null;
 
-    id:$('generalEditId').value||String(Date.now()),
-
-    type:'general',
-
-    date:$('generalDate').value,
-
-    time:$('generalTime').value,
-
-    source:'Observação geral',
-
-    volume:0,
-
-    duration:0,
-
-    durationUnit:'hours',
-
-    soda:0,
-
-    poly:0,
-
-    chlor:0,
-
-    anti:0,
-
-    phIn:null,
-
-    phOut:null,
-
-    turbidity:null,
-
-    floc:'',
-
-    notes:notes,
-
-    operator:$('operatorName').value
-
+  const item = {
+    id: existingId || String(nowTs),
+    createdAt: existingRecord ? existingRecord.createdAt : nowTs,
+    type: 'general',
+    date: $('generalDate').value,
+    time: $('generalTime').value,
+    source: 'Observação geral',
+    volume: 0,
+    duration: 0,
+    durationUnit: 'hours',
+    soda: 0,
+    poly: 0,
+    chlor: 0,
+    anti: 0,
+    phIn: null,
+    phOut: null,
+    turbidity: null,
+    floc: '',
+    notes: notes,
+    operator: $('operatorName').value
   };
 
   if(!item.date || !item.time){
-
-    alert('Informe a data e o horário.');
-
+    showNotice('Informe a data e o horário.');
     return;
-
   }
 
-  const index=records.findIndex(r=>r.id===item.id);
-
-  if(index>=0){
-
-    records[index]=item;
-
+  const index = records.findIndex(r => r.id === item.id);
+  if(index >= 0){
+    records[index] = item;
   }else{
-
     records.push(item);
-
   }
 
   persist();
-
-  $('filterDate').value=item.date;
-
+  $('filterDate').value = item.date;
   resetGeneralObservation();
-
   render();
-
-  alert('Observação geral salva com sucesso!');
-
+  showNotice('Observação geral salva com sucesso!');
 });
 
-
 function editGeneralObservation(id){
+  const r = records.find(x => x.id === id);
+  if(!r || r.type !== 'general') return;
 
-  const r=records.find(x=>x.id===id);
+  $('generalEditId').value = r.id;
+  $('generalDate').value = r.date;
+  $('generalTime').value = r.time;
+  $('generalNotes').value = r.notes || '';
 
-  if(!r || r.type!=='general') return;
-
-  $('generalEditId').value=r.id;
-
-  $('generalDate').value=r.date;
-
-  $('generalTime').value=r.time;
-
-  $('generalNotes').value=r.notes||'';
-
-  $('generalObservationPanel').scrollIntoView({
-
-    behavior:'smooth'
-
-  });
-
+  $('generalObservationPanel').scrollIntoView({ behavior: 'smooth' });
 }
 
 
@@ -1499,17 +2335,11 @@ function editGeneralObservation(id){
 // ============================================
 
 function deleteRecord(id){
-
-  if(confirm('Excluir este lançamento?')){
-
-    records=records.filter(r=>r.id!==id);
-
+  showConfirm('Deseja realmente excluir este lançamento? Os níveis dos tanques serão recalculados automaticamente.', () => {
+    records = records.filter(r => r.id !== id);
     persist();
-
     render();
-
-  }
-
+  }, 'Excluir Lançamento');
 }
 
 
@@ -1518,246 +2348,151 @@ function deleteRecord(id){
 // ============================================
 
 function filtered(){
+  const ref = $('filterDate').value || today();
+  const p = $('period').value;
+  const d = new Date(ref + 'T00:00:00');
 
-  const ref=$('filterDate').value||today();
+  return records.filter(r => {
+    const x = new Date(r.date + 'T00:00:00');
 
-  const p=$('period').value;
-
-  const d=new Date(ref+'T00:00:00');
-
-  return records.filter(r=>{
-
-    const x=new Date(r.date+'T00:00:00');
-
-    if(p==='daily'){
-
-      return r.date===ref;
-
+    if(p === 'daily'){
+      return r.date === ref;
     }
 
-    if(p==='weekly'){
-
-      const diff=(d-x)/86400000;
-
-      return diff>=0&&diff<7;
-
+    if(p === 'weekly'){
+      const diff = (d - x) / 86400000;
+      return diff >= 0 && diff < 7;
     }
 
-    if(p==='monthly'){
-
-      return x.getMonth()===d.getMonth()&&
-      x.getFullYear()===d.getFullYear();
-
+    if(p === 'monthly'){
+      return x.getMonth() === d.getMonth() &&
+             x.getFullYear() === d.getFullYear();
     }
 
     return true;
-
-  }).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
-
+  }).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
 }
 
 
 // ============================================
-// HISTÓRICO E INDICADORES
+// HISTÓRICO, TANQUES E INDICADORES
 // ============================================
 
 function render(){
+  const list = filtered();
+  const treatments = list.filter(r => r.type !== 'general');
+  const observations = list.filter(r => r.type === 'general');
 
-  const list=filtered();
+  const sum = k => treatments.reduce((a, r) => a + (Number(r[k]) || 0), 0);
 
-  const treatments=list.filter(r=>r.type!=='general');
+  $('kSoda').textContent = fmt(sum('soda')) + ' L';
+  $('kPoly').textContent = fmt(sum('poly')) + ' mL';
+  $('kChlor').textContent = fmt(sum('chlor')) + ' L';
+  $('kVolume').textContent = fmt(sum('volume')) + ' L';
 
-  const observations=list.filter(r=>r.type==='general');
+  $('count').textContent = treatments.length;
+  $('generalCount').textContent = observations.length;
+  $('durationTotal').textContent = fmt(sum('duration')) + ' h';
 
-  const sum=k=>treatments.reduce(
+  // Atualiza os 4 tanques de abastecimento
+  renderTanks();
 
-    (a,r)=>a+(Number(r[k])||0),0
+  $('rows').innerHTML = '';
+  $('empty').classList.toggle('hidden', list.length > 0);
 
-  );
+  list.slice().reverse().forEach(r => {
+    const tr = document.createElement('tr');
+    const dateText = `${r.date.split('-').reverse().join('/')} ${r.time}`;
 
-  $('kSoda').textContent=fmt(sum('soda'))+' L';
-
-  $('kPoly').textContent=fmt(sum('poly'))+' mL';
-
-  $('kChlor').textContent=fmt(sum('chlor'))+' L';
-
-  $('kVolume').textContent=fmt(sum('volume'))+' L';
-
-  $('count').textContent=treatments.length;
-
-  $('generalCount').textContent=observations.length;
-
-  $('durationTotal').textContent=fmt(sum('duration'))+' h';
-
-  $('rows').innerHTML='';
-
-  $('empty').classList.toggle('hidden',list.length>0);
-
-  list.slice().reverse().forEach(r=>{
-
-    const tr=document.createElement('tr');
-
-    const dateText =
-      `${r.date.split('-').reverse().join('/')} ${r.time}`;
-
-    if(r.type==='general'){
-
+    if(r.type === 'general'){
       tr.classList.add('observation-row');
 
-      const vals=[
-
+      const vals = [
         dateText,
-
         'OBSERVAÇÃO',
-
-        'Observação geral',
-
+        r.source || 'Observação geral',
         '-',
-
         '-',
-
         '-',
-
         '-',
-
         '-',
-
         '-',
-
         '-',
-
         '-',
-
         '-',
-
-        r.notes||''
-
+        r.notes || ''
       ];
 
-      vals.forEach((v,i)=>{
+      vals.forEach((v, i) => {
+        const td = document.createElement('td');
+        td.textContent = v;
 
-        const td=document.createElement('td');
-
-        td.textContent=v;
-
-        if(i===1){
-
-          td.innerHTML='<span class="observation-tag">GERAL</span>';
-
+        if(i === 1){
+          td.innerHTML = '<span class="observation-tag">GERAL</span>';
         }
-
-        if(i===12){
-
-          td.style.minWidth='220px';
-
-          td.style.whiteSpace='normal';
-
+        if(i === 12){
+          td.style.minWidth = '220px';
+          td.style.whiteSpace = 'normal';
         }
-
         tr.appendChild(td);
-
       });
-
     }else{
-
-      const vals=[
-
+      const vals = [
         dateText,
-
         'TRATAMENTO',
-
         r.source,
-
-        fmt(r.volume)+' L',
-
-        fmt(r.duration)+' h',
-
-        fmt(r.soda)+' L',
-
-        fmt(r.poly)+' mL',
-
-        fmt(r.chlor)+' L',
-
-        fmt(r.anti)+' L',
-
-        `${r.phIn??'-'} / ${r.phOut??'-'}`,
-
-        r.turbidity==null?'-':r.turbidity+' NTU',
-
-        r.floc||'-',
-
-        r.notes||''
-
+        fmt(r.volume) + ' L',
+        fmt(r.duration) + ' h',
+        fmt(r.soda) + ' L',
+        fmt(r.poly) + ' mL',
+        fmt(r.chlor) + ' L',
+        fmt(r.anti) + ' L',
+        `${r.phIn ?? '-'} / ${r.phOut ?? '-'}`,
+        r.turbidity == null ? '-' : r.turbidity + ' NTU',
+        r.floc || '-',
+        r.notes || ''
       ];
 
-      vals.forEach((v,i)=>{
+      vals.forEach((v, i) => {
+        const td = document.createElement('td');
+        td.textContent = v;
 
-        const td=document.createElement('td');
-
-        td.textContent=v;
-
-        if(i===1){
-
-          td.innerHTML='<span class="treatment-tag">TRATAMENTO</span>';
-
+        if(i === 1){
+          td.innerHTML = '<span class="treatment-tag">TRATAMENTO</span>';
         }
-
-        if(i===12){
-
-          td.style.minWidth='220px';
-
-          td.style.whiteSpace='normal';
-
+        if(i === 12){
+          td.style.minWidth = '220px';
+          td.style.whiteSpace = 'normal';
         }
-
         tr.appendChild(td);
-
       });
-
     }
 
-    const actions=document.createElement('td');
+    const actions = document.createElement('td');
+    actions.className = 'no-print whitespace-nowrap';
 
-    actions.className='no-print whitespace-nowrap';
-
-    const edit=document.createElement('button');
-
-    edit.className='text-amber-300 mr-2';
-
-    edit.textContent='Editar';
-
-    edit.addEventListener('click',()=>{
-
-      if(r.type==='general'){
-
+    const edit = document.createElement('button');
+    edit.className = 'text-amber-300 mr-2';
+    edit.textContent = 'Editar';
+    edit.addEventListener('click', () => {
+      if(r.type === 'general'){
         editGeneralObservation(r.id);
-
       }else{
-
         editRecord(r.id);
-
       }
-
     });
 
-    const del=document.createElement('button');
+    const del = document.createElement('button');
+    del.className = 'text-rose-300';
+    del.textContent = 'Excluir';
+    del.addEventListener('click', () => deleteRecord(r.id));
 
-    del.className='text-rose-300';
-
-    del.textContent='Excluir';
-
-    del.addEventListener('click',()=>deleteRecord(r.id));
-
-    actions.append(edit,del);
-
+    actions.append(edit, del);
     tr.appendChild(actions);
-
     $('rows').appendChild(tr);
-
   });
 
   renderChart(list);
-
 }
 
 
@@ -1765,126 +2500,74 @@ function render(){
 // GRÁFICOS
 // ============================================
 
-function renderChart(list=filtered()){
-
-  const ctx=$('chart');
-
+function renderChart(list = filtered()){
+  const ctx = $('chart');
   if(chart){
-
     chart.destroy();
-
   }
 
-  const treatments=list.filter(r=>r.type!=='general');
+  const treatments = list.filter(r => r.type !== 'general');
+  const mode = $('chartMode').value;
 
-  const mode=$('chartMode').value;
+  let labels, data;
 
-  let labels,data;
-
-  if(mode==='chem'){
-
-    labels=[
-
-      'Soda (L)',
+  if(mode === 'chem'){
+    labels = [
+      'Soda Líquida (L)',
       'Polímero (mL)',
-      'Cloreto (L)',
+      'Polímero PAC (L)',
       'Antiespumante (L)'
-
     ];
 
-    data=[
-
-      treatments.reduce((a,r)=>a+(Number(r.soda)||0),0),
-
-      treatments.reduce((a,r)=>a+(Number(r.poly)||0),0),
-
-      treatments.reduce((a,r)=>a+(Number(r.chlor)||0),0),
-
-      treatments.reduce((a,r)=>a+(Number(r.anti)||0),0)
-
+    data = [
+      treatments.reduce((a, r) => a + (Number(r.soda) || 0), 0),
+      treatments.reduce((a, r) => a + (Number(r.poly) || 0), 0),
+      treatments.reduce((a, r) => a + (Number(r.chlor) || 0), 0),
+      treatments.reduce((a, r) => a + (Number(r.anti) || 0), 0)
     ];
-
   }else{
-
-    labels=['Fábrica','Transporte','Exímia','IBC'];
-
-    data=labels.map(s=>
-
-      treatments.filter(r=>r.source===s)
-
-      .reduce((a,r)=>a+(Number(r.volume)||0),0)
-
+    labels = ['Fábrica', 'Transporte', 'Exímia', 'IBC'];
+    data = labels.map(s =>
+      treatments.filter(r => r.source === s)
+        .reduce((a, r) => a + (Number(r.volume) || 0), 0)
     );
-
   }
 
-  chart=new Chart(ctx,{
-
-    type:'bar',
-
-    data:{
-
+  chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
       labels,
-
-      datasets:[{
-
-        label:mode==='chem'?'Consumo acumulado':'Volume (L)',
-
+      datasets: [{
+        label: mode === 'chem' ? 'Consumo acumulado' : 'Volume (L)',
         data,
-
-        backgroundColor:[
-
+        backgroundColor: [
           '#3b82f6',
           '#10b981',
           '#f59e0b',
-          '#e11d48'
-
+          '#a855f7'
         ],
-
-        borderRadius:8
-
+        borderRadius: 8
       }]
-
     },
-
-    options:{
-
-      responsive:true,
-
-      maintainAspectRatio:false,
-
-      plugins:{
-
-        legend:{display:false}
-
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
       },
-
-      scales:{
-
-        x:{
-
-          ticks:{color:'#bfdbfe'},
-
-          grid:{display:false}
-
+      scales: {
+        x: {
+          ticks: { color: '#bfdbfe' },
+          grid: { display: false }
         },
-
-        y:{
-
-          beginAtZero:true,
-
-          ticks:{color:'#bfdbfe'},
-
-          grid:{color:'#24416e'}
-
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#bfdbfe' },
+          grid: { color: '#24416e' }
         }
-
       }
-
     }
-
   });
-
 }
 
 
@@ -1892,137 +2575,94 @@ function renderChart(list=filtered()){
 // DOWNLOAD
 // ============================================
 
-function download(blob,name){
-
-  const url=URL.createObjectURL(blob);
-
-  const a=document.createElement('a');
-
-  a.href=url;
-
-  a.download=name;
-
+function download(blob, name){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
   document.body.appendChild(a);
-
   a.click();
-
   a.remove();
-
-  setTimeout(()=>URL.revokeObjectURL(url),1500);
-
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
 
 
 // ============================================
-// BACKUP JSON
+// BACKUP JSON (INCLUINDO NÍVEIS DOS TANQUES)
 // ============================================
 
 function exportJSON(){
+  const payload = {
+    version: 'v6_supplies',
+    exportedAt: new Date().toISOString(),
+    records,
+    supplies
+  };
 
   download(
-
     new Blob(
-
-      [JSON.stringify(records,null,2)],
-
-      {type:'application/json'}
-
+      [JSON.stringify(payload, null, 2)],
+      { type: 'application/json' }
     ),
-
     `Backup_ETE_Zuppani_${today()}.json`
-
   );
-
 }
 
 function exportCSV(){
-
-  const list=filtered();
-
+  const list = filtered();
   if(!list.length){
-
-    alert('Não há registros para exportar.');
-
+    showNotice('Não há registros para exportar.');
     return;
-
   }
 
-  const headers=[
-
+  const headers = [
     'Tipo',
     'Data',
     'Hora',
     'Origem',
     'Volume_L',
     'Duracao_horas',
-    'Soda_L',
+    'Soda_Liquida_L',
     'Polimero_mL',
-    'Cloreto_L',
+    'Polimero_PAC_L',
     'Antiespumante_L',
     'pH_Entrada',
     'pH_Saida',
     'Turbidez_NTU',
     'Floculacao',
     'Observacoes'
-
   ];
 
-  const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
 
-  const lines=[
-
+  const lines = [
     headers.join(';'),
-
-    ...list.map(r=>[
-
-      r.type==='general'?'Observação geral':'Tratamento',
-
+    ...list.map(r => [
+      r.type === 'general' ? 'Observação geral' : 'Tratamento',
       r.date,
-
       r.time,
-
       r.source,
-
       r.volume,
-
       r.duration,
-
       r.soda,
-
       r.poly,
-
       r.chlor,
-
       r.anti,
-
       r.phIn,
-
       r.phOut,
-
       r.turbidity,
-
       r.floc,
-
       r.notes
-
     ].map(q).join(';'))
-
   ];
 
   download(
-
     new Blob(
-
-      ['\ufeff'+lines.join('\n')],
-
-      {type:'text/csv;charset=utf-8'}
-
+      ['\ufeff' + lines.join('\n')],
+      { type: 'text/csv;charset=utf-8' }
     ),
-
     `Relatorio_ETE_${today()}.csv`
-
   );
-
 }
 
 
@@ -2031,73 +2671,56 @@ function exportCSV(){
 // ============================================
 
 function openBackup(){
-
   $('backupModal').classList.remove('hidden');
-
 }
 
 function closeBackup(){
-
   $('backupModal').classList.add('hidden');
-
 }
 
 function importJSON(){
-
-  const f=$('restoreFile').files[0];
-
+  const f = $('restoreFile').files[0];
   if(!f){
-
-    alert('Selecione um arquivo JSON.');
-
+    showNotice('Selecione um arquivo JSON.');
     return;
-
   }
 
-  const rd=new FileReader();
-
-  rd.onload=()=>{
-
+  const rd = new FileReader();
+  rd.onload = () => {
     try{
+      const parsed = JSON.parse(rd.result);
+      let incomingRecords = null;
+      let incomingSupplies = null;
 
-      const v=JSON.parse(rd.result);
-
-      if(
-
-        !Array.isArray(v)||
-
-        v.some(x=>!x||typeof x!=='object'||!x.id||!x.date)
-
-      ){
-
-        throw Error();
-
+      if(Array.isArray(parsed)){
+        incomingRecords = parsed;
+      }else if(parsed && typeof parsed === 'object' && Array.isArray(parsed.records)){
+        incomingRecords = parsed.records;
+        incomingSupplies = parsed.supplies || null;
       }
 
-      if(confirm(`Restaurar ${v.length} registros? Os dados atuais serão substituídos.`)){
+      if(!incomingRecords || incomingRecords.some(x => !x || typeof x !== 'object' || !x.id || !x.date)){
+        throw Error();
+      }
 
-        records=normalizeRecords(v);
-
+      showConfirm(`Restaurar ${incomingRecords.length} registros? Os dados atuais serão substituídos.`, () => {
+        records = normalizeRecords(incomingRecords);
         persist();
 
+        if(incomingSupplies && typeof incomingSupplies === 'object'){
+          localStorage.setItem(SUPPLY_KEY, JSON.stringify(incomingSupplies));
+          loadSupplies();
+        }
+
         render();
-
         closeBackup();
-
-        alert('Backup restaurado com sucesso!');
-
-      }
-
+        showNotice('Backup restaurado com sucesso!');
+      }, 'Restaurar Backup');
     }catch(e){
-
-      alert('Arquivo inválido ou incompatível.');
-
+      showNotice('Arquivo inválido ou incompatível.');
     }
-
   };
-
   rd.readAsText(f);
-
 }
 
 
@@ -2106,262 +2729,179 @@ function importJSON(){
 // ============================================
 
 function printReport(){
-
-  const list=filtered();
-
+  const list = filtered();
   if(!list.length){
-
-    alert('Não há registros para gerar o relatório.');
-
+    showNotice('Não há registros para gerar o relatório.');
     return;
-
   }
 
-  const treatmentRows=list
-
-    .filter(r=>r.type!=='general')
-
-    .map(r=>`
-
+  const treatmentRows = list
+    .filter(r => r.type !== 'general')
+    .map(r => `
       <tr>
-
         <td>${escapeHTML(r.date)} ${escapeHTML(r.time)}</td>
-
         <td>${escapeHTML(r.source)}</td>
-
         <td>${fmt(r.volume)}</td>
-
         <td>${fmt(r.duration)}</td>
-
         <td>${fmt(r.soda)}</td>
-
         <td>${fmt(r.poly)}</td>
-
         <td>${fmt(r.chlor)}</td>
-
         <td>${fmt(r.anti)}</td>
-
-        <td>${escapeHTML(r.phIn??'-')} / ${escapeHTML(r.phOut??'-')}</td>
-
-        <td>${escapeHTML(r.turbidity??'-')}</td>
-
-        <td>${escapeHTML(r.floc||'-')}</td>
-
-        <td>${escapeHTML(r.notes||'-')}</td>
-
+        <td>${escapeHTML(r.phIn ?? '-')} / ${escapeHTML(r.phOut ?? '-')}</td>
+        <td>${escapeHTML(r.turbidity ?? '-')}</td>
+        <td>${escapeHTML(r.floc || '-')}</td>
+        <td>${escapeHTML(r.notes || '-')}</td>
       </tr>
-
     `).join('');
 
-  const observationRows=list
+  const treatments = list.filter(r => r.type !== 'general');
+  const observations = list.filter(r => r.type === 'general');
 
-    .filter(r=>r.type==='general')
+  const total = k => treatments.reduce((a, r) => a + (Number(r[k]) || 0), 0);
 
-    .map(r=>`
-
+  const supplyRows = PRODUCT_DEFS.map(prod => {
+    const m = calculateTankMetrics(prod);
+    return `
       <tr>
-
-        <td>${escapeHTML(r.date)} ${escapeHTML(r.time)}</td>
-
-        <td colspan="2">${escapeHTML(r.operator||$('operatorName').value)}</td>
-
-        <td colspan="9">${escapeHTML(r.notes)}</td>
-
+        <td>${escapeHTML(prod.name)}</td>
+        <td>${fmt(m.capacity)} ${prod.unit}</td>
+        <td>${fmt(m.remaining)} ${prod.unit}</td>
+        <td><b>${m.percent.toFixed(1)}%</b></td>
+        <td>${escapeHTML(m.refilledAt)}</td>
       </tr>
+    `;
+  }).join('');
 
-    `).join('');
-
-  const treatments=list.filter(r=>r.type!=='general');
-
-  const observations=list.filter(r=>r.type==='general');
-
-  const total=k=>treatments.reduce(
-
-    (a,r)=>a+(Number(r[k])||0),0
-
-  );
-
-  $('print-area').innerHTML=`
-
+  $('print-area').innerHTML = `
     <div style="font-family:Arial;padding:20px">
 
       <div style="border-bottom:3px solid #063b91;padding-bottom:12px;margin-bottom:18px">
-
         <h1 style="font-size:22px;font-weight:bold;margin:0">
-
           ZUPPANI INDUSTRIAL LTDA.
-
         </h1>
-
         <h2 style="font-size:16px;margin-top:8px">
-
           RELATÓRIO OPERACIONAL — ETE
-
         </h2>
-
       </div>
 
       <p>
-
         <b>Período:</b> ${escapeHTML($('period').selectedOptions[0].text)}
-
         &nbsp; | &nbsp;
-
         <b>Referência:</b> ${escapeHTML($('filterDate').value)}
-
       </p>
 
       <p>
-
         <b>Operador responsável:</b>
-
         ${escapeHTML($('operatorName').value)}
-
       </p>
 
       <hr style="margin:15px 0">
 
       <h3 style="font-size:14px;margin-bottom:10px">
+        NÍVEL ATUAL DOS RESERVATÓRIOS (ABASTECIMENTO)
+      </h3>
 
-        RESUMO DOS INDICADORES
+      <table border="1" cellspacing="0" cellpadding="5"
+      style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:16px">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Capacidade Total (100%)</th>
+            <th>Volume Disponível</th>
+            <th>Nível (%)</th>
+            <th>Último Reabastecimento</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${supplyRows}
+        </tbody>
+      </table>
 
+      <h3 style="font-size:14px;margin-bottom:10px">
+        RESUMO DOS INDICADORES DO PERÍODO
       </h3>
 
       <p>
-
-        Soda cáustica: ${fmt(total('soda'))} L<br>
-
+        Soda líquida: ${fmt(total('soda'))} L<br>
         Polímero: ${fmt(total('poly'))} mL<br>
-
-        Cloreto de alumínio: ${fmt(total('chlor'))} L<br>
-
+        Polímero PAC: ${fmt(total('chlor'))} L<br>
         Antiespumante: ${fmt(total('anti'))} L<br>
-
         Volume tratado: ${fmt(total('volume'))} L<br>
-
         Tempo total: ${fmt(total('duration'))} horas<br>
-
         Quantidade de tratamentos: ${treatments.length}<br>
-
         Observações gerais: ${observations.length}
-
       </p>
 
       <div class="print-section">
-
         <h3 style="font-size:14px;margin:20px 0 10px">
-
           HISTÓRICO DE TRATAMENTOS
-
         </h3>
 
         <table border="1" cellspacing="0" cellpadding="5"
-
         style="width:100%;border-collapse:collapse;font-size:9px">
-
           <thead>
-
             <tr>
-
               <th>Data/hora</th>
               <th>Origem</th>
               <th>Volume L</th>
               <th>Tempo h</th>
               <th>Soda L</th>
               <th>Polímero mL</th>
-              <th>Cloreto L</th>
+              <th>Polímero PAC L</th>
               <th>Anti L</th>
               <th>pH E/S</th>
               <th>NTU</th>
               <th>Floculação</th>
               <th>Observação</th>
-
             </tr>
-
           </thead>
-
           <tbody>
-
-            ${treatmentRows||'<tr><td colspan="12">Nenhum tratamento no período.</td></tr>'}
-
+            ${treatmentRows || '<tr><td colspan="12">Nenhum tratamento no período.</td></tr>'}
           </tbody>
-
         </table>
-
       </div>
 
       <div class="print-section">
-
         <h3 style="font-size:14px;margin:25px 0 10px">
-
           OBSERVAÇÕES GERAIS E OCORRÊNCIAS
-
         </h3>
 
         <table border="1" cellspacing="0" cellpadding="6"
-
         style="width:100%;border-collapse:collapse;font-size:10px">
-
           <thead>
-
             <tr>
-
               <th>Data / Hora</th>
-
               <th>Operador</th>
-
               <th>Ocorrência / Observação</th>
-
             </tr>
-
           </thead>
-
           <tbody>
-
-            ${observations.map(r=>`
-
+            ${observations.map(r => `
               <tr>
-
                 <td>${escapeHTML(r.date)} ${escapeHTML(r.time)}</td>
-
-                <td>${escapeHTML(r.operator||$('operatorName').value)}</td>
-
+                <td>${escapeHTML(r.operator || $('operatorName').value)}</td>
                 <td>${escapeHTML(r.notes)}</td>
-
               </tr>
-
-            `).join('')||'<tr><td colspan="3">Nenhuma observação geral no período.</td></tr>'}
-
+            `).join('') || '<tr><td colspan="3">Nenhuma observação geral no período.</td></tr>'}
           </tbody>
-
         </table>
-
       </div>
 
       <div style="margin-top:45px">
-
         <p>Operador responsável: ${escapeHTML($('operatorName').value)}</p>
-
         <br>
-
         <p>________________________________________</p>
-
         <p>Assinatura do responsável</p>
-
       </div>
 
       <p style="font-size:9px;color:#555;margin-top:30px">
-
         Desenvolvido por Ray de Sousa Silva • Sistema ETE Zuppani Advanced
-
       </p>
 
     </div>
-
   `;
 
   window.print();
-
 }
 
 
@@ -2369,15 +2909,17 @@ function printReport(){
 // INICIALIZAÇÃO
 // ============================================
 
-$('filterDate').value=today();
-
-$('entryDate').value=today();
-
-$('entryTime').value=currentTime();
-
-$('generalDate').value=today();
-
-$('generalTime').value=currentTime();
+try{
+  loadSupplies();
+  if($('filterDate')) $('filterDate').value = today();
+  if($('entryDate')) $('entryDate').value = today();
+  if($('entryTime')) $('entryTime').value = currentTime();
+  if($('generalDate')) $('generalDate').value = today();
+  if($('generalTime')) $('generalTime').value = currentTime();
+  renderTanks();
+}catch(err){
+  console.error('Erro na inicialização:', err);
+}
 
 </script>
 
